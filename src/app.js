@@ -18,7 +18,8 @@ app.listen(port, async () => {
                 password VARCHAR(255) NOT NULL,
                 full_name VARCHAR(255) NOT NULL,
                 phone_number VARCHAR(255) NOT NULL,
-                address VARCHAR(255) NOT NULL
+                address VARCHAR(255) NOT NULL,
+                loggedin BOOLEAN NOT NULL
             );`
         );
     } catch (error) {
