@@ -7,5 +7,19 @@ const port = config.port;
 app.use(express.json());
 
 app.listen(port, async () => {
+    try {
+        await pool.query(
+            `CREATE TABLE IF NOT EXISTS users (
+                id SERIAL NOT NULL PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                full_name VARCHAR(255) NOT NULL,
+                phone_number VARCHAR(255) NOT NULL,
+                address VARCHAR(255) NOT NULL
+            );`
+        );
+    } catch (error) {
+        console.log(error);
+    }
     console.log(`Server is running at http://localhost:${port}`);
 });
