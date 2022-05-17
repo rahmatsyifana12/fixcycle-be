@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const config = require('../configs/config');
 const pool = require('../db');
 
@@ -31,8 +32,8 @@ async function addNewUser(req, res) {
 
     try {
         await pool.query(
-            `INSERT INTO users (email, password, full_name, phone_number, address, loggedin)
-            VALUES ($1, $2, $3, $4, $5, FALSE);`,
+            `INSERT INTO users (email, password, full_name, phone_number, address)
+            VALUES ($1, $2, $3, $4, $5);`,
             [email, hashedPassword, fullName, phoneNumber, address]
         );
 
@@ -82,14 +83,27 @@ async function loginUser(req, res) {
             });
         }
 
+        const payload = {
+            userId: user.id
+        };
+
+        const accessToken = jwt.sign(
+            payload,
+            config.jwt.accessSecret,
+            { expiresIn: config.jwt.accessExpire }
+        );
+
         await pool.query(
-            'UPDATE users SET loggedin=TRUE WHERE email=$1;',
-            [email]
+            'UPDATE users SET access_token=$1 WHERE email=$2;',
+            [accessToken, email]
         );
 
         return res.status(200).json({
             status: 'success',
-            message: 'Successfully login'
+            message: 'Successfully login',
+            data: {
+                accessToken
+            }
         });
     } catch (error) {
         console.log(error);
@@ -98,6 +112,10 @@ async function loginUser(req, res) {
             message: 'Unexpected server error'
         });
     }
+}
+
+async function logoutUser(req, res) {
+    
 }
 
 module.exports = {
