@@ -1,10 +1,13 @@
 const express = require('express');
+const pool = require('./db');
+const routes = require('./routes');
 const config = require('./configs/config');
 
 const app = express();
 const port = config.port;
 
 app.use(express.json());
+app.use(routes);
 
 app.listen(port, async () => {
     try {
