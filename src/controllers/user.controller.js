@@ -11,7 +11,7 @@ async function addNewUser (req, res) {
             [email]
         );
 
-        if (existUser.countRows > 0) {
+        if (existUser.rowCount > 0) {
             return res.status(400).json({
                 status: 'fail',
                 message: 'This account is already exist'
