@@ -9,7 +9,6 @@ async function getServices(req, res) {
         const services = await pool.query(
             'SELECT * FROM services WHERE services.user_id=$1;',
             [userId]
-
         );
 
         return res.status(200).json({
