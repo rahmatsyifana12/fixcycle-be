@@ -84,7 +84,8 @@ async function loginUser(req, res) {
         }
 
         const payload = {
-            userId: user.id
+            userId: user.id,
+            name: user.name
         };
 
         const accessToken = jwt.sign(
@@ -114,8 +115,8 @@ async function loginUser(req, res) {
 }
 
 async function logoutUser(req, res) {
-    const token = req.headers['authorization'].split(' ')[1];
-    const userId = jwt.decode(token).userId;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
 
     try {
         await pool.query(
