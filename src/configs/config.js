@@ -8,7 +8,8 @@ const config = {
         host: env.DB_HOST,
         database: env.DB_DATABASE,
         username: env.DB_USERNAME,
-        password: env.DB_PASSWORD
+        password: env.DB_PASSWORD,
+        port: parseInt(env.DB_PORT)
     },
     hashRounds: 10,
     port: 5000
