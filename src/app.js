@@ -11,7 +11,7 @@ app.listen(port, async () => {
         await pool.query(
             `CREATE TABLE IF NOT EXISTS users (
                 id SERIAL NOT NULL PRIMARY KEY,
-                username VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 full_name VARCHAR(255) NOT NULL,
                 phone_number VARCHAR(255) NOT NULL,
