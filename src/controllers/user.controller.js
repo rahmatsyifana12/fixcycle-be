@@ -4,7 +4,7 @@ const config = require('../configs/config');
 const pool = require('../db');
 
 async function addNewUser(req, res) {
-    const { email, password, fullName, phoneNumber, address } = req.body;
+    const { email, password, name, phoneNumber, address } = req.body;
 
     try {
         const existUser = await pool.query(
@@ -32,9 +32,9 @@ async function addNewUser(req, res) {
 
     try {
         await pool.query(
-            `INSERT INTO users (email, password, full_name, phone_number, address)
+            `INSERT INTO users (email, password, name, phone_number, address)
             VALUES ($1, $2, $3, $4, $5);`,
-            [email, hashedPassword, fullName, phoneNumber, address]
+            [email, hashedPassword, name, phoneNumber, address]
         );
 
         return res.status(201).json({
