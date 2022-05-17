@@ -106,7 +106,6 @@ async function loginUser(req, res) {
             }
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
@@ -115,10 +114,29 @@ async function loginUser(req, res) {
 }
 
 async function logoutUser(req, res) {
-    
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(token).userId;
+
+    try {
+        await pool.query(
+            'UPDATE users SET access_token=NULL WHERE id=$1;',
+            [userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully logout'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
 }
 
 module.exports = {
     addNewUser,
-    loginUser
+    loginUser,
+    logoutUser
 };
