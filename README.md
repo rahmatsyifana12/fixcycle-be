@@ -12,7 +12,7 @@ cp .env.example .env
 npm run start
 ```
 
-#### Technologies
+### Technologies
 * JavaScript
 * Node.js
 * Express.js
