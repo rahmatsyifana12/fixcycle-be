@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon src/app"
+    "start": "nodemon src/app",
+    "jwt:generate": "node scripts/jwt-generate"
   },
   "author": "",
   "license": "ISC",
