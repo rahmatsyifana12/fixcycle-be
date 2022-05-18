@@ -8,6 +8,9 @@ npm install
 # initialize your env
 cp .env.example .env
 
+# generate token secret
+npm run jwt:generate
+
 # start the project
 npm run start
 ```
