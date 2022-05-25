@@ -1,12 +1,12 @@
 const  { Router } = require('express');
 const { addNewMotorcycle, getAllMotorcyclesFromUser } = require('./controllers/motorcycle.controller');
-const { getServices } = require('./controllers/service.controller');
+const { getAllServices } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
 
 const router = Router();
 
-// router.get('/api/v1/home', authenticate, getServices);
+router.get('/api/v1/home', authenticate, getAllServices);
 router.get('/api/v1/motorcycles', authenticate, getAllMotorcyclesFromUser);
 
 router.post('/api/v1/users/add', addNewUser);

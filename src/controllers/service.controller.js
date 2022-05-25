@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const pool = require("../db");
 
-async function getServices(req, res) {
+async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
     const name = jwt.decode(accessToken).name;
@@ -29,5 +29,5 @@ async function getServices(req, res) {
 }
 
 module.exports = {
-    getServices
+    getAllServices
 };
