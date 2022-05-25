@@ -6,10 +6,10 @@ async function addNewMotorcycle(req, res) {
         lisencePlate,
         ownerName,
         brand, type,
-        cylinder_capacity,
-        production_year,
+        cylinderCapacity,
+        productionYear,
         color,
-        fuel_type
+        fuelType
     } = req.body;
 
     const accessToken = req.headers['authorization'].split(' ')[1];
@@ -29,11 +29,17 @@ async function addNewMotorcycle(req, res) {
         }
 
         await pool.query(
-            `INSERT INTO motorcycles  (lisence_plate, owner_name, brand, type, cyclinder_capacity,
-                production_year, color, fuel_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
+            `INSERT INTO motorcycles  (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
+                production_year, color, fuel_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
                 [
-                    lisencePlate, ownerName, brand, type,
-                    cylinder_capacity, production_year, color, fuel_type
+                    userId,
+                    lisencePlate,
+                    ownerName,
+                    brand, type,
+                    cylinderCapacity,
+                    productionYear,
+                    color,
+                    fuelType
                 ]
         );
 
@@ -64,7 +70,7 @@ async function getAllMotorcyclesFromUser(req, res) {
             status: 'success',
             message: 'Found all motorcycles for user',
             data: {
-                motorcycles
+                motorcycles: motorcycles.rows
             }
         })
     } catch (error) {

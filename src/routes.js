@@ -7,11 +7,11 @@ const { authenticate } = require('./middlewares/authenticate.middleware');
 const router = Router();
 
 // router.get('/api/v1/home', authenticate, getServices);
-router.get('api/v1/motorycles', authenticate, getAllMotorcyclesFromUser);
+router.get('/api/v1/motorcycles', authenticate, getAllMotorcyclesFromUser);
 
 router.post('/api/v1/users/add', addNewUser);
 router.post('/api/v1/login', loginUser);
-router.post('api/v1/motorcycles/add', authenticate, addNewMotorcycle);
+router.post('/api/v1/motorcycles/add', authenticate, addNewMotorcycle);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
 
