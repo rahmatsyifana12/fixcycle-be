@@ -50,6 +50,33 @@ async function addNewMotorcycle(req, res) {
     }
 }
 
+async function viewAllMotorcyclesFromUser(req, res) {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const motorcycles = await pool.query(
+            'SELECT * FROM motorcycles WHERE user_id=$1;',
+            [userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Found all motorcycles for user',
+            data: {
+                motorcycles
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
-    addNewMotorcycle
+    addNewMotorcycle,
+    viewAllMotorcyclesFromUser
 };
