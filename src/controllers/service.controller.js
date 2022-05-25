@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const pool = require("../db");
 
 async function getServices(req, res) {
@@ -7,7 +8,7 @@ async function getServices(req, res) {
 
     try {
         const services = await pool.query(
-            'SELECT * FROM services WHERE services.user_id=$1;',
+            'SELECT * FROM services WHERE user_id=$1;',
             [userId]
         );
 
