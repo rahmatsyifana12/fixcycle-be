@@ -50,7 +50,7 @@ async function addNewMotorcycle(req, res) {
     }
 }
 
-async function viewAllMotorcyclesFromUser(req, res) {
+async function getAllMotorcyclesFromUser(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
 
@@ -78,5 +78,5 @@ async function viewAllMotorcyclesFromUser(req, res) {
 
 module.exports = {
     addNewMotorcycle,
-    viewAllMotorcyclesFromUser
+    getAllMotorcyclesFromUser
 };
