@@ -42,10 +42,15 @@ async function addNewService(req, res) {
 
     try {
         await pool.query(
-            `INSERT INTO services (customer_id, motorcycle_id, service_type, service_request, service_time, created_at)
-            VALUES ($1, $2, $3, $4, $5, );`,
-            []
-        )
+            `INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, created_at)
+            VALUES ($1, $2, $3, $4, current_timestamp, current_timestamp);`,
+            [userId, 1, serviceType, serviceRequest]
+        );
+
+        return res.status(201).json({
+            status: 'success',
+            message: 'Successfully added a new service'
+        });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({
