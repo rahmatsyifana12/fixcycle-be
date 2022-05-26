@@ -38,6 +38,20 @@ app.listen(port, async () => {
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );`
         );
+
+        await pool.query(
+            `CREATE TABLE IF NOT EXISTS services (
+                id SERIAL NOT NULL PRIMARY KEY,
+                user_id INT NOT NULL,
+                motorcycle_id INT NOT NULL,
+                service_type SMALLINT NOT NULL,
+                service_request VARCHAR(1023),
+                service_time TIMESTAMP NOT NULL,
+                created_at TIMESTAMP NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (motorcycle_id) REFERENCES motorcycles(id)
+            );`
+        );
     } catch (error) {
         console.log(error);
     }
