@@ -1,13 +1,6 @@
 const jwt = require('jsonwebtoken');
 const pool = require("../db");
 
-const serviceTypes = {
-    "FAST_TRACK": 1,
-    "LIGHT_SERVICE": 2,
-    "HEAVY_REPAIR": 3,
-    "CLAIM_REPAIR": 4
-};
-
 async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
@@ -61,5 +54,6 @@ async function addNewService(req, res) {
 }
 
 module.exports = {
-    getAllServices
+    getAllServices,
+    addNewService
 };

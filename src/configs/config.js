@@ -16,6 +16,12 @@ const config = {
     jwt: {
         accessSecret: env.ACCESS_TOKEN_SECRET,
         accessExpire: '1d'
+    },
+    serviceTypes: {
+        "FAST_TRACK": 1,
+        "LIGHT_SERVICE": 2,
+        "HEAVY_REPAIR": 3,
+        "CLAIM_REPAIR": 4
     }
 };
 
