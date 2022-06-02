@@ -47,6 +47,7 @@ app.listen(port, async () => {
                 service_type SMALLINT NOT NULL,
                 service_request VARCHAR(1023),
                 service_time TIMESTAMP NOT NULL,
+                status SMALLINT NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (motorcycle_id) REFERENCES motorcycles(id)
