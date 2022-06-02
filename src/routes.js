@@ -6,7 +6,7 @@ const { authenticate } = require('./middlewares/authenticate.middleware');
 
 const router = Router();
 
-// router.get('/api/v1/services', authenticate, getAllServices);
+router.get('/api/v1/services', authenticate, getAllServices);
 router.get('/api/v1/motorcycles', authenticate, getAllMotorcyclesFromUser);
 
 router.post('/api/v1/users/add', addNewUser);

@@ -12,7 +12,6 @@ const ServiceStatus = {
 async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
-    const name = jwt.decode(accessToken).name;
 
     try {
         const services = await pool.query(
@@ -24,7 +23,6 @@ async function getAllServices(req, res) {
             status: 'success',
             message: 'Services found',
             data: {
-                name,
                 services: services.rows
             }
         });
