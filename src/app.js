@@ -19,6 +19,7 @@ app.listen(port, async () => {
                 name VARCHAR(255) NOT NULL,
                 phone_number VARCHAR(255),
                 address VARCHAR(255),
+                is_admin BOOLEAN NOT NULL,
                 access_token VARCHAR(255)
             );`
         );
