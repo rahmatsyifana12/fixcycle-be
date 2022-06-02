@@ -1,3 +1,4 @@
+const moment = require('moment');
 const pool = require('./db');
 
 async function runSeeder() {
