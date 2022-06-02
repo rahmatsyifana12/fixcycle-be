@@ -17,8 +17,8 @@ app.listen(port, async () => {
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 name VARCHAR(255) NOT NULL,
-                phone_number VARCHAR(255) NOT NULL,
-                address VARCHAR(255) NOT NULL,
+                phone_number VARCHAR(255),
+                address VARCHAR(255),
                 access_token VARCHAR(255)
             );`
         );
