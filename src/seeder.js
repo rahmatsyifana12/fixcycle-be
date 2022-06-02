@@ -1,6 +1,7 @@
 const pool = require('./db');
 
 async function runSeeder() {
+    const dateNow = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
     try {
         await pool.query(
             `CREATE TABLE IF NOT EXISTS users (
@@ -59,8 +60,18 @@ async function runSeeder() {
                 INSERT INTO motorcycles (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
                 production_year, color, fuel_type) VALUES
                 (1, 'A 123 BC', 'John Doe', 'Yamaha', 'Sport', '255', '2019-05-23', 'Blue', 'Pertamax'),
-                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', 'Trail', '155', '2015-01-22', 'Red', 'Pertalite');
+                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', 'Trail', '155', '2015-01-22', 'Red', 'Pertalite'),
+                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', 'Sport', '155', '2016-11-12', 'Green', 'Pertamax Turbo');
             `
+        );
+
+        await pool.query(
+            `
+                INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, status, created_at)
+                VALUES (1, 1, 1, 'Fix flat tires', '2022-07-22 12:12:00', 1, $1),
+                (2, 1, 2, 'Perbaiki handle kopling', '2022-06-30 14:12:00', 1, $2);
+            `,
+            [dateNow, dateNow]
         );
     } catch (error) {
         console.log(error.message);
