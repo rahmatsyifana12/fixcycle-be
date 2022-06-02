@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 const pool = require("../db");
 
 async function getAllServices(req, res) {
@@ -33,12 +34,13 @@ async function addNewService(req, res) {
     const { motorcycleId } = req.params;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
+    const dateNow = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
     try {
         await pool.query(
-            `INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, created_at)
-            VALUES ($1, $2, $3, $4, $5, current_timestamp);`,
-            [userId, motorcycleId, serviceType, '2022-01-31 2:12 PM', serviceRequest]
+            `INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, status, created_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7);`,
+            [userId, motorcycleId, serviceType, serviceRequest, '2022-01-31 14:12:00', 1, dateNow]
         );
 
         return res.status(201).json({
