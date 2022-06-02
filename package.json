@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon src/app",
-    "jwt:generate": "node scripts/jwt-generate"
+    "jwt:generate": "node scripts/jwt-generate",
+    "seed": "node src/seeder"
   },
   "author": "",
   "license": "ISC",

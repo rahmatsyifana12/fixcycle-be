@@ -11,6 +11,9 @@ cp .env.example .env
 # generate token secret
 npm run jwt:generate
 
+# seed data into database
+npm run seed
+
 # start the project
 npm run start
 ```

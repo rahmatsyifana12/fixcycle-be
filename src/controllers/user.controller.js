@@ -32,8 +32,8 @@ async function addNewUser(req, res) {
 
     try {
         await pool.query(
-            `INSERT INTO users (email, password, name, phone_number, address)
-            VALUES ($1, $2, $3, $4, $5);`,
+            `INSERT INTO users (email, password, name, phone_number, address, is_admin)
+            VALUES ($1, $2, $3, $4, $5, FALSE);`,
             [email, hashedPassword, name, phoneNumber, address]
         );
 
