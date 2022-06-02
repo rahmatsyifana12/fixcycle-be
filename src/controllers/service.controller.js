@@ -2,6 +2,13 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const pool = require("../db");
 
+const ServiceStatus = {
+    PENDING: 1,
+    ONGOING: 2,
+    FINISH: 3,
+    DECLINED: 4
+};
+
 async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
