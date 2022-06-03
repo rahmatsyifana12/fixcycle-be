@@ -2,21 +2,6 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const pool = require("../db");
 
-const ServiceStatus = {
-    PENDING: 1,
-    WAITING: 2,
-    ONGOING: 3,
-    FINISH: 4,
-    DECLINED: 5
-};
-
-const ServiceType = {
-    FAST_TRACK: 1,
-    LIGHT_SERVICE: 2,
-    HEAVY_REPAIR: 3,
-    CLAIM_SERVICE: 4
-};
-
 async function getAllServices(req, res) {
     try {
         const services = await pool.query(

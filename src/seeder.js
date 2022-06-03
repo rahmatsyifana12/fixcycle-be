@@ -2,7 +2,7 @@ const moment = require('moment');
 const pool = require('./db');
 const bcrypt = require('bcrypt');
 const config = require('./configs/config');
-const { MotorcycleType } = require('./controllers/motorcycle.controller');
+const { MotorcycleType } = require('./validations/motorcycle.validation');
 
 function getHashedPassword(rawPassword) {
     const hashedPassword = bcrypt.hashSync(
@@ -66,18 +66,18 @@ async function runSeeder() {
                 ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE),
                 ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE)
             `,
-            [getHashedPassword('johndoe123'), getHashedPassword('maryjane123'), getHashedPassword('admin123')]
+            [getHashedPassword('Johndoe123'), getHashedPassword('Maryjane123'), getHashedPassword('Admin123')]
         );
 
         await pool.query(
             `
                 INSERT INTO motorcycles (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
                 production_year, color) VALUES
-                (1, 'A 123 BC', 'John Doe', 'Yamaha', $1, '255', '2019-05-23', 'Blue'),
-                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', $2, '155', '2015-01-22', 'Red'),
-                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', $3, '155', '2016-11-12', 'Green');
+                (1, 'A123BC', 'John Doe', 'Yamaha', $1, '255', '2019-05-23', 'Blue'),
+                (1, 'D456DD', 'Rahmat Syifana', 'Honda', $2, '155', '2015-01-22', 'Red'),
+                (2, 'E23DXS', 'Richard Stevan', 'Honda', $3, '125', '2016-11-12', 'Green');
             `,
-            [MotorcycleType.SPORT, MotorcycleType.CUB, MotorcycleType.SPORT]
+            [MotorcycleType.SPORT, MotorcycleType.CUB, MotorcycleType.SCOOTER]
         );
 
         await pool.query(
