@@ -10,6 +10,13 @@ const ServiceStatus = {
     DECLINED: 5
 };
 
+const ServiceType = {
+    FAST_TRACK: 1,
+    LIGHT_SERVICE: 2,
+    HEAVY_REPAIR: 3,
+    CLAIM_SERVICE: 4
+};
+
 async function getAllServices(req, res) {
     try {
         const services = await pool.query(
