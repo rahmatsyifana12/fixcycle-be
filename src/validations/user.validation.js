@@ -40,6 +40,4 @@ const newUserSchema = joi.object({
         .max(255)
 });
 
-module.exports = {
-    newUserSchema
-};
+module.exports = { newUserSchema };
