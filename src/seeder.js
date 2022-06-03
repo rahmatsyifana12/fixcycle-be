@@ -2,7 +2,7 @@ const moment = require('moment');
 const pool = require('./db');
 const bcrypt = require('bcrypt');
 const config = require('./configs/config');
-const moment = require('moment');
+const { MotorcycleType } = require('./controllers/motorcycle.controller');
 
 function getHashedPassword(rawPassword) {
     const hashedPassword = bcrypt.hashSync(
@@ -74,10 +74,11 @@ async function runSeeder() {
             `
                 INSERT INTO motorcycles (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
                 production_year, color, fuel_type) VALUES
-                (1, 'A 123 BC', 'John Doe', 'Yamaha', 'Sport', '255', '2019-05-23', 'Blue', 'Pertamax'),
-                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', 'Trail', '155', '2015-01-22', 'Red', 'Pertalite'),
-                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', 'Sport', '155', '2016-11-12', 'Green', 'Pertamax Turbo');
-            `
+                (1, 'A 123 BC', 'John Doe', 'Yamaha', $1, '255', '2019-05-23', 'Blue', 'Pertamax'),
+                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', $2, '155', '2015-01-22', 'Red', 'Pertalite'),
+                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', $3, '155', '2016-11-12', 'Green', 'Pertamax Turbo');
+            `,
+            [MotorcycleType.SPORT, MotorcycleType.CUB, MotorcycleType.SPORT]
         );
 
         await pool.query(

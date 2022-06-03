@@ -89,6 +89,7 @@ async function getAllMotorcyclesForUser(req, res) {
 }
 
 module.exports = {
+    MotorcycleType,
     addNewMotorcycle,
     getAllMotorcyclesForUser
 };
