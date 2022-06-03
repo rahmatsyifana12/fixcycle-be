@@ -1,5 +1,17 @@
 const moment = require('moment');
 const pool = require('./db');
+const bcrypt = require('bcrypt');
+const config = require('./configs/config');
+const moment = require('moment');
+
+function getHashedPassword(rawPassword) {
+    const hashedPassword = bcrypt.hashSync(
+        rawPassword,
+        config.hashRounds
+    );
+
+    return hashedPassword;
+}
 
 async function runSeeder() {
     const dateNow = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
@@ -51,9 +63,11 @@ async function runSeeder() {
         await pool.query(
             `
                 INSERT INTO users (email, password, name, phone_number, address, is_admin)
-                VALUES ('johndoe@example.com', 'johndoe123', 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE),
-                ('maryjane@example.com', 'maryjane123', 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE);
-            `
+                VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE),
+                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE),
+                ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE)
+            `,
+            [getHashedPassword('johndoe123'), getHashedPassword('maryjane123'), getHashedPassword('admin123')]
         );
 
         await pool.query(
@@ -74,6 +88,8 @@ async function runSeeder() {
             `,
             [dateNow, dateNow]
         );
+
+        console.log('Seeding success . . .');
     } catch (error) {
         console.log(error.message);
     }
