@@ -1,5 +1,11 @@
 const joi = require('joi');
 
+const MotorcycleType = {
+    CUB: 1,
+    SCOOTER: 2,
+    SPORT: 3
+};
+
 const newMotorcycleSchema = joi.object({
     lisencePlate: joi.string()
         .alphanum()
@@ -31,5 +37,6 @@ const newMotorcycleSchema = joi.object({
 });
 
 module.exports = {
+    MotorcycleType,
     newMotorcycleSchema
 };

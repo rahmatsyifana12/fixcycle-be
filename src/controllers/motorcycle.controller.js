@@ -1,12 +1,6 @@
 const jwt = require('jsonwebtoken');
 const pool = require("../db");
 
-const MotorcycleType = {
-    CUB: 1,
-    SCOOTER: 2,
-    SPORT: 3
-};
-
 async function addNewMotorcycle(req, res) {
     const {
         lisencePlate,
@@ -87,7 +81,6 @@ async function getAllMotorcyclesForUser(req, res) {
 }
 
 module.exports = {
-    MotorcycleType,
     addNewMotorcycle,
     getAllMotorcyclesForUser
 };
