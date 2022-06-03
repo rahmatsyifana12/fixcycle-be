@@ -27,9 +27,6 @@ const newMotorcycleSchema = joi.object({
         .required(),
 
     color: joi.string()
-        .required(),
-
-    fuelType: joi.string()
         .required()
 });
 

@@ -14,8 +14,7 @@ async function addNewMotorcycle(req, res) {
         brand, type,
         cylinderCapacity,
         productionYear,
-        color,
-        fuelType
+        color
     } = req.body;
 
     const accessToken = req.headers['authorization'].split(' ')[1];
@@ -36,7 +35,7 @@ async function addNewMotorcycle(req, res) {
 
         await pool.query(
             `INSERT INTO motorcycles  (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
-                production_year, color, fuel_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
+                production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
                 [
                     userId,
                     lisencePlate,
@@ -44,8 +43,7 @@ async function addNewMotorcycle(req, res) {
                     brand, type,
                     cylinderCapacity,
                     productionYear,
-                    color,
-                    fuelType
+                    color
                 ]
         );
 
