@@ -40,7 +40,6 @@ async function runSeeder() {
                 cylinder_capacity DECIMAL(19, 2) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
-                fuel_type VARCHAR(32) NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );`
         );
@@ -73,10 +72,10 @@ async function runSeeder() {
         await pool.query(
             `
                 INSERT INTO motorcycles (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
-                production_year, color, fuel_type) VALUES
-                (1, 'A 123 BC', 'John Doe', 'Yamaha', $1, '255', '2019-05-23', 'Blue', 'Pertamax'),
-                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', $2, '155', '2015-01-22', 'Red', 'Pertalite'),
-                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', $3, '155', '2016-11-12', 'Green', 'Pertamax Turbo');
+                production_year, color) VALUES
+                (1, 'A 123 BC', 'John Doe', 'Yamaha', $1, '255', '2019-05-23', 'Blue'),
+                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', $2, '155', '2015-01-22', 'Red'),
+                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', $3, '155', '2016-11-12', 'Green');
             `,
             [MotorcycleType.SPORT, MotorcycleType.CUB, MotorcycleType.SPORT]
         );
