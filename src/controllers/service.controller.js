@@ -4,9 +4,10 @@ const pool = require("../db");
 
 const ServiceStatus = {
     PENDING: 1,
-    ONGOING: 2,
-    FINISH: 3,
-    DECLINED: 4
+    WAITING: 2,
+    ONGOING: 3,
+    FINISH: 4,
+    DECLINED: 5
 };
 
 async function getAllServices(req, res) {
