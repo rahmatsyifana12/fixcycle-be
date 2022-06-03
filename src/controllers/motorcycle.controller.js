@@ -70,7 +70,46 @@ async function getAllMotorcyclesForUser(req, res) {
             data: {
                 motorcycles: motorcycles.rows
             }
-        })
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
+async function getMotorcycleById(req, res) {
+    const { motorcycleId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const user = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        const motorcycle = await pool.query(
+            'SELECT * FROM motorcycles WHERE id=$1;',
+            [motorcycleId]
+        );
+
+        if (user.rows[0].is_admin || motorcycle.rows[0].user_id === userId) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'Found motorcycle',
+                data: {
+                    motorcycle: motorcycle.rows[0]
+                }
+            });
+        }
+
+        return res.status(401).json({
+            status: 'fail',
+            message: 'Unauthorized error'
+        });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({
@@ -82,5 +121,6 @@ async function getAllMotorcyclesForUser(req, res) {
 
 module.exports = {
     addNewMotorcycle,
-    getAllMotorcyclesForUser
+    getAllMotorcyclesForUser,
+    getMotorcycleById
 };
