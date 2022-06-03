@@ -26,7 +26,7 @@ const newUserSchema = joi.object({
         .max(64)
 
         .regex(/[a-zA-Z ]+/)
-        .rule({ message: '{#label} must only be string' })
+        .rule({ message: '{#label} must only be alphabet' })
 
         .required(),
 
