@@ -63,9 +63,10 @@ async function runSeeder() {
             `
                 INSERT INTO users (email, password, name, phone_number, address, is_admin)
                 VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE),
-                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE);
+                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE),
+                ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE)
             `,
-            [getHashedPassword('johndoe123'), getHashedPassword('maryjane123')]
+            [getHashedPassword('johndoe123'), getHashedPassword('maryjane123'), getHashedPassword('admin123')]
         );
 
         await pool.query(
