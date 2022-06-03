@@ -1,6 +1,12 @@
 const jwt = require('jsonwebtoken');
 const pool = require("../db");
 
+const MOTORCYCLE_TYPE = {
+    CUB: 1,
+    SCOOTER: 2,
+    SPORT: 3
+};
+
 async function addNewMotorcycle(req, res) {
     const {
         lisencePlate,
