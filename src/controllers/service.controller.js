@@ -83,8 +83,13 @@ async function addNewService(req, res) {
     }
 }
 
+async function changeServiceStatus(req, res) {
+    
+}
+
 module.exports = {
     getAllServices,
     addNewService,
-    getAllServicesForUser
+    getAllServicesForUser,
+    changeServiceStatus
 };
