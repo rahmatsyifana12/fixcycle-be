@@ -72,7 +72,7 @@ async function addNewService(req, res) {
 
     try {
         await pool.query(
-            `INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, status, created_at)
+            `INSERT INTO services (user_id, motorcycle_id, type, request, service_time, status, created_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7);`,
             [userId, motorcycleId, serviceType, serviceRequest, '2022-01-31 14:12:00', 1, dateNow]
         );

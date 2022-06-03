@@ -36,7 +36,7 @@ async function runSeeder() {
                 lisence_plate VARCHAR(32) NOT NULL,
                 owner_name VARCHAR(255) NOT NULL,
                 brand VARCHAR(255) NOT NULL,
-                type VARCHAR(255) NOT NULL,
+                type SMALLINT NOT NULL,
                 cylinder_capacity DECIMAL(19, 2) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
@@ -50,8 +50,8 @@ async function runSeeder() {
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
                 motorcycle_id INT NOT NULL,
-                service_type SMALLINT NOT NULL,
-                service_request VARCHAR(1023),
+                type SMALLINT NOT NULL,
+                request VARCHAR(1023),
                 service_time TIMESTAMP NOT NULL,
                 status SMALLINT NOT NULL,
                 created_at TIMESTAMP NOT NULL,
@@ -82,7 +82,7 @@ async function runSeeder() {
 
         await pool.query(
             `
-                INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, status, created_at)
+                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, status, created_at)
                 VALUES (1, 1, 1, 'Fix flat tires', '2022-07-22 12:12:00', 1, $1),
                 (2, 1, 2, 'Perbaiki handle kopling', '2022-06-30 14:12:00', 1, $2);
             `,
