@@ -36,7 +36,30 @@ const newMotorcycleSchema = joi.object({
         .required()
 });
 
+const editMotorcycleSchema = joi.object({
+    lisencePlate: joi.string()
+        .alphanum(),
+
+    ownerName: joi.string()
+        .min(3)
+        .max(64)
+
+        .regex(/[a-zA-Z ]+/)
+        .rule({ message: '{#label} must only be alphabet' }),
+
+    brand: joi.string(),
+
+    type: joi.number(),
+
+    cylinderCapacity: joi.number(),
+
+    productionYear: joi.date(),
+
+    color: joi.string()
+});
+
 module.exports = {
     MotorcycleType,
-    newMotorcycleSchema
+    newMotorcycleSchema,
+    editMotorcycleSchema
 };
