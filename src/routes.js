@@ -1,5 +1,5 @@
 const  { Router } = require('express');
-const { addNewMotorcycle, getAllMotorcyclesForUser, getMotorcycleById, editMotorcycle } = require('./controllers/motorcycle.controller');
+const { addNewMotorcycle, getAllMotorcyclesForUser, getMotorcycleById, editMotorcycle, deleteMotorcycle } = require('./controllers/motorcycle.controller');
 const { getAllServices, addNewService, getAllServicesForUser } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
@@ -29,5 +29,6 @@ router.put('/api/v1/motorcycles/edit/:motorcycleId',
     editMotorcycle);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
+router.delete('/api/v1/motorcycles/:motorcycleId', authenticate, deleteMotorcycle);
 
 module.exports = router;

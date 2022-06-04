@@ -156,7 +156,28 @@ async function editMotorcycle(req, res) {
 }
 
 async function deleteMotorcycle(req, res) {
+    const { motorcycleId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).id;
 
+    try {
+        await pool.query(
+            'DELETE FROM motorcycles WHERE id=$1 AND user_id=$2;',
+            [motorcycleId, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully deleted a motorcycle'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+    
 }
 
 module.exports = {
