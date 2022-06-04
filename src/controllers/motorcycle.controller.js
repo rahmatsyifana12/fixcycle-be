@@ -158,5 +158,6 @@ async function editMotorcycle(req, res) {
 module.exports = {
     addNewMotorcycle,
     getAllMotorcyclesForUser,
-    getMotorcycleById
+    getMotorcycleById,
+    editMotorcycle
 };
