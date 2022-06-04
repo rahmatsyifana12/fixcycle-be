@@ -155,9 +155,14 @@ async function editMotorcycle(req, res) {
     }
 }
 
+async function deleteMotorcycle(req, res) {
+
+}
+
 module.exports = {
     addNewMotorcycle,
     getAllMotorcyclesForUser,
     getMotorcycleById,
-    editMotorcycle
+    editMotorcycle,
+    deleteMotorcycle
 };
