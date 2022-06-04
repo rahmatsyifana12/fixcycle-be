@@ -10,7 +10,6 @@ async function addNewMotorcycle(req, res) {
         productionYear,
         color
     } = req.body;
-
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
 
@@ -109,6 +108,43 @@ async function getMotorcycleById(req, res) {
             data: {
                 motorcycle: motorcycle.rows[0]
             }
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
+async function editMotorcycle(req, res) {
+    const {
+        lisencePlate,
+        ownerName,
+        brand, type,
+        cylinderCapacity,
+        productionYear,
+        color
+    } = req.body;
+    const { motorcycleId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        await pool.query(
+            `
+                UPDATE motorcycles
+                SET lisence_plate=$1, owner_name=$2, brand=$3, type=$4, cylinder_capacity=$5,
+                production_year=$6, color=$7
+                WHERE id=$8 AND user_id=$9;
+            `,
+            [lisencePlate, ownerName, brand, type, cylinderCapacity, productionYear, color, motorcycleId, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated a motorcycle'
         });
     } catch (error) {
         console.log(error.message);
