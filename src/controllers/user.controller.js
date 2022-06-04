@@ -114,6 +114,32 @@ async function loginUser(req, res) {
     }
 }
 
+async function editUserProfile(req, res) {
+    const { password, name, phoneNumber, address } = req.body;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        await pool.query(
+            `
+                UPDATE users SET password=$1, name=$2, phone_number=$3, address=$4
+                WHERE id=$5;
+            `,
+            [password, name, phoneNumber, address, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated a user profile'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 async function logoutUser(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
@@ -139,5 +165,6 @@ async function logoutUser(req, res) {
 module.exports = {
     addNewUser,
     loginUser,
+    editUserProfile,
     logoutUser
 };
