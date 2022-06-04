@@ -158,9 +158,21 @@ async function editMotorcycle(req, res) {
 async function deleteMotorcycle(req, res) {
     const { motorcycleId } = req.params;
     const accessToken = req.headers['authorization'].split(' ')[1];
-    const userId = jwt.decode(accessToken).id;
+    const userId = jwt.decode(accessToken).userId;
 
     try {
+        const service = await pool.query(
+            'SELECT * FROM services WHERE user_id=$1 AND motorcycle_id=$2;',
+            [userId, motorcycleId]
+        );
+
+        if (service.rowCount > 0) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Failed to delete motorcycle'
+            });
+        }
+
         await pool.query(
             'DELETE FROM motorcycles WHERE id=$1 AND user_id=$2;',
             [motorcycleId, userId]
