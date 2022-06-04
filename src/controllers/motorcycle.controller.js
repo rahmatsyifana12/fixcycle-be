@@ -96,19 +96,19 @@ async function getMotorcycleById(req, res) {
             [motorcycleId]
         );
 
-        if (user.rows[0].is_admin || motorcycle.rows[0].user_id === userId) {
-            return res.status(200).json({
-                status: 'success',
-                message: 'Found motorcycle',
-                data: {
-                    motorcycle: motorcycle.rows[0]
-                }
+        if (!user.rows[0].is_admin && motorcycle.rows[0].user_id !== userId) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
             });
         }
 
-        return res.status(401).json({
-            status: 'fail',
-            message: 'Unauthorized error'
+        return res.status(200).json({
+            status: 'success',
+            message: 'Found motorcycle',
+            data: {
+                motorcycle: motorcycle.rows[0]
+            }
         });
     } catch (error) {
         console.log(error.message);
