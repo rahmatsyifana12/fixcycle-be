@@ -1,6 +1,6 @@
-const  { Router } = require('express');
+const { Router } = require('express');
 const { addNewMotorcycle, getAllMotorcyclesForUser, getMotorcycleById, editMotorcycle, deleteMotorcycle } = require('./controllers/motorcycle.controller');
-const { getAllServices, addNewService, getAllServicesForUser } = require('./controllers/service.controller');
+const { getAllServices, addNewService, getAllServicesForUser, changeServiceStatus } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
 const { validate } = require('./middlewares/validate.middleware');
@@ -11,6 +11,7 @@ const router = Router();
 
 router.get('/api/v1/services', authenticate, getAllServices);
 router.get('/api/v1/services/user', authenticate, getAllServicesForUser);
+router.put('/api/v1/services/edit/:servicesId', authenticate, changeServiceStatus);
 router.get('/api/v1/motorcycles/user', authenticate, getAllMotorcyclesForUser);
 router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById);
 
