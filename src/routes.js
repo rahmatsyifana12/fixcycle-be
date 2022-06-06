@@ -16,18 +16,18 @@ router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById)
 
 router.post('/api/v1/register', validate(newUserSchema), addNewUser);
 router.post('/api/v1/login', loginUser);
-router.post('/api/v1/motorcycles/add',
+router.post('/api/v1/motorcycles/',
     authenticate,
     validate(newMotorcycleSchema),
     addNewMotorcycle);
 router.post('/api/v1/services/:motorcycleId', authenticate, addNewService);
 
-router.put('/api/v1/users/edit', authenticate, validate(editProfileSchema), editUserProfile);
-router.put('/api/v1/motorcycles/edit/:motorcycleId',
+router.put('/api/v1/users/', authenticate, validate(editProfileSchema), editUserProfile);
+router.put('/api/v1/motorcycles/:motorcycleId',
     authenticate,
     validate(editMotorcycleSchema),
     editMotorcycle);
-router.put('/api/v1/services/edit/:serviceId', authenticate, changeServiceStatus);
+router.put('/api/v1/services/:serviceId', authenticate, changeServiceStatus);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
 router.delete('/api/v1/motorcycles/:motorcycleId', authenticate, deleteMotorcycle);
