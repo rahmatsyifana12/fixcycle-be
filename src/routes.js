@@ -11,6 +11,7 @@ const router = Router();
 
 router.get('/api/v1/services', authenticate, getAllServices);
 router.get('/api/v1/services/user', authenticate, getAllServicesForUser);
+router.put('/api/v1/services/edit/:servicesId', authenticate, changeServiceStatus);
 router.get('/api/v1/motorcycles/user', authenticate, getAllMotorcyclesForUser);
 router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById);
 
