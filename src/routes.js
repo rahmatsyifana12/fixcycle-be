@@ -27,7 +27,7 @@ router.put('/api/v1/motorcycles/edit/:motorcycleId',
     authenticate,
     validate(editMotorcycleSchema),
     editMotorcycle);
-router.put('/api/v1/services/edit/:servicesId', authenticate, changeServiceStatus);
+router.put('/api/v1/services/edit/:serviceId', authenticate, changeServiceStatus);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
 router.delete('/api/v1/motorcycles/:motorcycleId', authenticate, deleteMotorcycle);

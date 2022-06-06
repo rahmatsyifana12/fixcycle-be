@@ -93,7 +93,8 @@ async function changeServiceStatus(req, res) {
         }
 
         await pool.query(
-            `UPDATE services SET status = $1 WHERE id = $2;`, [serviceStatus, serviceId]
+            'UPDATE services SET status=$1 WHERE id=$2;',
+            [serviceStatus, serviceId]
         );
 
         return res.status(201).json({
