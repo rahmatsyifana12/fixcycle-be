@@ -29,8 +29,7 @@ async function getAllServicesForUser(req, res) {
 
     try {
         const services = await pool.query(
-            'SELECT * FROM services WHERE user_id=$1;',
-            [userId]
+            'SELECT * FROM services WHERE user_id=$1;', [userId]
         );
 
         return res.status(200).json({
@@ -58,8 +57,7 @@ async function addNewService(req, res) {
     try {
         await pool.query(
             `INSERT INTO services (user_id, motorcycle_id, type, request, service_time, status, created_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-            [userId, motorcycleId, serviceType, serviceRequest, '2022-01-31 14:12:00', 1, dateNow]
+            VALUES ($1, $2, $3, $4, $5, $6, $7);`, [userId, motorcycleId, serviceType, serviceRequest, '2022-01-31 14:12:00', 1, dateNow]
         );
 
         return res.status(201).json({
@@ -76,7 +74,25 @@ async function addNewService(req, res) {
 }
 
 async function changeServiceStatus(req, res) {
-    
+    const { serviceStatus } = req.body;
+    const { serviceId } = req.params;
+
+    try {
+        await pool.query(
+            `UPDATE services SET status = $1 WHERE id = $2;`, [serviceStatus, serviceId]
+        );
+
+        return res.status(201).json({
+            status: 'success',
+            message: 'Successfully updated a service'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
 }
 
 module.exports = {
