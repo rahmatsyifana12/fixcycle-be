@@ -76,15 +76,29 @@ async function addNewService(req, res) {
 async function changeServiceStatus(req, res) {
     const { serviceStatus } = req.body;
     const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
 
     try {
+        const isAdmin = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!isAdmin.rowCount) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
         await pool.query(
             `UPDATE services SET status = $1 WHERE id = $2;`, [serviceStatus, serviceId]
         );
 
         return res.status(201).json({
             status: 'success',
-            message: 'Successfully updated a service'
+            message: 'Successfully updated a service status'
         });
     } catch (error) {
         console.log(error.message);

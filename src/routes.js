@@ -11,7 +11,6 @@ const router = Router();
 
 router.get('/api/v1/services', authenticate, getAllServices);
 router.get('/api/v1/services/user', authenticate, getAllServicesForUser);
-router.put('/api/v1/services/edit/:servicesId', authenticate, changeServiceStatus);
 router.get('/api/v1/motorcycles/user', authenticate, getAllMotorcyclesForUser);
 router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById);
 
@@ -28,6 +27,7 @@ router.put('/api/v1/motorcycles/edit/:motorcycleId',
     authenticate,
     validate(editMotorcycleSchema),
     editMotorcycle);
+router.put('/api/v1/services/edit/:servicesId', authenticate, changeServiceStatus);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
 router.delete('/api/v1/motorcycles/:motorcycleId', authenticate, deleteMotorcycle);
