@@ -21,6 +21,6 @@ const newServiceSchema = joi.object({
 
 module.exports = {
     ServiceStatus,
-    ServiceStatus,
+    ServiceType,
     newServiceSchema
 };

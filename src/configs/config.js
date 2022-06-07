@@ -12,7 +12,7 @@ const config = {
         port: parseInt(env.DB_PORT)
     },
     hashRounds: 10,
-    port: 3000,
+    port: 5000,
     jwt: {
         accessSecret: env.ACCESS_TOKEN_SECRET,
         accessExpire: '1d'
