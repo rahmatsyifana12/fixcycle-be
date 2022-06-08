@@ -16,11 +16,11 @@ router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById)
 
 router.post('/api/v1/register', validate(newUserSchema), addNewUser);
 router.post('/api/v1/login', loginUser);
-router.post('/api/v1/motorcycles/',
+router.post('/api/v1/motorcycles',
     authenticate,
     validate(newMotorcycleSchema),
     addNewMotorcycle);
-router.post('/api/v1/services/:motorcycleId', authenticate, addNewService);
+router.post('/api/v1/services', authenticate, addNewService);
 
 router.put('/api/v1/users/', authenticate, validate(editProfileSchema), editUserProfile);
 router.put('/api/v1/motorcycles/:motorcycleId',
