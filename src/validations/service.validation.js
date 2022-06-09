@@ -9,10 +9,8 @@ const ServiceStatus = {
 };
 
 const ServiceType = {
-    FAST_TRACK: 1,
-    LIGHT_SERVICE: 2,
-    HEAVY_REPAIR: 3,
-    CLAIM_SERVICE: 4
+    FULL_SERVICE: 1,
+    LIGHT_SERVICE: 2
 };
 
 const newServiceSchema = joi.object({
