@@ -162,9 +162,35 @@ async function logoutUser(req, res) {
     }
 }
 
+async function getUser(req, res) {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const user = await pool.query(
+            'SELECT id, email, name, phone_number, address FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully found user',
+            data: {
+                user: user.rows[0]
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     addNewUser,
     loginUser,
     editUserProfile,
-    logoutUser
+    logoutUser,
+    getUser
 };
