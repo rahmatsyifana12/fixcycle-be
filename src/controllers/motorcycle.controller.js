@@ -189,7 +189,6 @@ async function deleteMotorcycle(req, res) {
             message: 'Unexpected server error'
         });
     }
-    
 }
 
 module.exports = {

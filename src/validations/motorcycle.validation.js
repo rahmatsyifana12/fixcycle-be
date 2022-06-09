@@ -1,10 +1,10 @@
 const joi = require('joi');
 
-const MotorcycleType = {
-    CUB: 1,
-    SCOOTER: 2,
-    SPORT: 3
-};
+// const MotorcycleType = {
+//     CUB: 1,
+//     SCOOTER: 2,
+//     SPORT: 3
+// };
 
 const newMotorcycleSchema = joi.object({
     lisencePlate: joi.string()
@@ -23,7 +23,7 @@ const newMotorcycleSchema = joi.object({
     brand: joi.string()
         .required(),
 
-    type: joi.number()
+    type: joi.string()
         .required(),
 
     cylinderCapacity: joi.number()
@@ -49,7 +49,7 @@ const editMotorcycleSchema = joi.object({
 
     brand: joi.string(),
 
-    type: joi.number(),
+    type: joi.string(),
 
     cylinderCapacity: joi.number(),
 
