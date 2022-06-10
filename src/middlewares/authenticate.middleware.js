@@ -14,7 +14,7 @@ async function authenticate(req, res, next) {
             'SELECT * FROM users WHERE id=$1;',
             [userId]
         );
-            
+
         if (!user.rows[0].access_token) {
             return res.status(401).json({
                 status: 'fail',

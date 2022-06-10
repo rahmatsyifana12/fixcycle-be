@@ -79,7 +79,7 @@ async function loginUser(req, res) {
         if (!bcrypt.compareSync(password, user.password)) {
             return res.status(400).json({
                 status: 'fail',
-                message: 'Object or value is invalid'
+                message: 'Incorrect password'
             });
         }
 
