@@ -71,11 +71,11 @@ async function runSeeder() {
 
         await pool.query(
             `
-                INSERT INTO motorcycles (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
+                INSERT INTO motorcycles (user_id, lisence_plate, name, brand, type, cylinder_capacity,
                 production_year, color) VALUES
-                (1, 'A123BC', 'John Doe', 'Yamaha', 'Matic', '255', '2019-05-23', 'Blue'),
-                (1, 'D456DD', 'Rahmat Syifana', 'Honda', 'Bebek', '155', '2015-01-22', 'Red'),
-                (2, 'E23DXS', 'Richard Stevan', 'Honda', 'Sport', '2016-11-12', 'Green');
+                (1, 'A123BC', 'X Max', 'Yamaha', 'Matic', 255, '2019-05-23', 'Blue'),
+                (1, 'D456DD', 'CB', 'Honda', 'Sport', 155', '2015-01-22, 'Red'),
+                (2, 'E23DXS', 'Revo', 'Honda', 'Bebek', 125, '2016-11-12', 'Green');
             `
         );
 
