@@ -10,7 +10,6 @@ async function addNewMotorcycle(req, res) {
         productionYear,
         color
     } = req.body;
-
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
 
@@ -119,8 +118,83 @@ async function getMotorcycleById(req, res) {
     }
 }
 
+async function editMotorcycle(req, res) {
+    const {
+        lisencePlate,
+        ownerName,
+        brand, type,
+        cylinderCapacity,
+        productionYear,
+        color
+    } = req.body;
+    const { motorcycleId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        await pool.query(
+            `
+                UPDATE motorcycles
+                SET lisence_plate=$1, owner_name=$2, brand=$3, type=$4, cylinder_capacity=$5,
+                production_year=$6, color=$7
+                WHERE id=$8 AND user_id=$9;
+            `,
+            [lisencePlate, ownerName, brand, type, cylinderCapacity, productionYear, color, motorcycleId, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated a motorcycle'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
+async function deleteMotorcycle(req, res) {
+    const { motorcycleId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const service = await pool.query(
+            'SELECT * FROM services WHERE user_id=$1 AND motorcycle_id=$2;',
+            [userId, motorcycleId]
+        );
+
+        if (service.rowCount > 0) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Failed to delete motorcycle'
+            });
+        }
+
+        await pool.query(
+            'DELETE FROM motorcycles WHERE id=$1 AND user_id=$2;',
+            [motorcycleId, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully deleted a motorcycle'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     addNewMotorcycle,
     getAllMotorcyclesForUser,
-    getMotorcycleById
+    getMotorcycleById,
+    editMotorcycle,
+    deleteMotorcycle
 };
