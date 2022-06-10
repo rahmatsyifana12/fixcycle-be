@@ -59,7 +59,6 @@ const editMotorcycleSchema = joi.object({
 });
 
 module.exports = {
-    MotorcycleType,
     newMotorcycleSchema,
     editMotorcycleSchema
 };
