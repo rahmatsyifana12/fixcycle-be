@@ -2,7 +2,6 @@ const moment = require('moment');
 const pool = require('./db');
 const bcrypt = require('bcrypt');
 const config = require('./configs/config');
-const { MotorcycleType } = require('./validations/motorcycle.validation');
 
 function getHashedPassword(rawPassword) {
     const hashedPassword = bcrypt.hashSync(
