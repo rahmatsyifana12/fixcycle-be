@@ -201,10 +201,17 @@ async function deleteMotorcycle(req, res) {
             });
         }
 
-        await pool.query(
-            'DELETE FROM motorcycles WHERE id=$1 AND user_id=$2;',
+        const motorcycleToBeDeleted = await pool.query(
+            'DELETE FROM motorcycles WHERE id=$1 AND user_id=$2 RETURNING *;',
             [motorcycleId, userId]
         );
+
+        if (!motorcycleToBeDeleted.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Motorcycle not found'
+            });
+        }
 
         return res.status(200).json({
             status: 'success',
