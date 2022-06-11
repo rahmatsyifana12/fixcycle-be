@@ -168,15 +168,19 @@ async function getUser(req, res) {
 
     try {
         const user = await pool.query(
-            'SELECT id, email, name, phone_number AS [phoneNumber], address FROM users WHERE id=$1;',
+            'SELECT id, email, name, phone_number, address FROM users WHERE id=$1;',
             [userId]
         );
+
+         const userData = user.rows[0];
+         userData['phoneNumber'] = userData['phone_number'];
+         delete userData['phone_number'];
 
         return res.status(200).json({
             status: 'success',
             message: 'Successfully found user',
             data: {
-                user: user.rows[0]
+                user: userData
             }
         });
     } catch (error) {
