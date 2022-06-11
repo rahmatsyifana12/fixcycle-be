@@ -112,12 +112,13 @@ async function getMotorcycleById(req, res) {
             });
         }
 
-        if (user.rows[0].id !== userId) {
+        if (motorcycle.rows[0].user_id !== userId) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Motorcycle not found'
             });
         }
+        console.log(user.rows[0].id);
 
         return res.status(200).json({
             status: 'success',
