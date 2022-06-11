@@ -172,9 +172,9 @@ async function getUser(req, res) {
             [userId]
         );
 
-         const userData = user.rows[0];
-         userData['phoneNumber'] = userData['phone_number'];
-         delete userData['phone_number'];
+        const userData = user.rows[0];
+        userData['phoneNumber'] = userData['phone_number'];
+        delete userData['phone_number'];
 
         return res.status(200).json({
             status: 'success',
