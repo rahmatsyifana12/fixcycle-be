@@ -132,6 +132,20 @@ async function editMotorcycle(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
+        const  foundMotorcycle = await pool.query(
+            'SELECT * FROM motorcycles WHERE id=$1;',
+            [motorcycleId]
+        );
+
+        const motorcycle = foundMotorcycle.rows[0];
+        const newLisencePlate = lisencePlate ? lisencePlate : motorcycle.lisence_plate;
+        const newOwnerName = ownerName ? ownerName : motorcycle.owner_name;
+        const newBrand = brand ? brand : motorcycle.brand;
+        const newType = type ? type : motorcycle.type;
+        const newCylinderCapacity = cylinderCapacity ? cylinderCapacity : motorcycle.cylinder_capacity;
+        const newProductionYear = productionYear ? productionYear : motorcycle.production_year;
+        const newColor = color ? color : motorcycle.color;
+
         await pool.query(
             `
                 UPDATE motorcycles
@@ -139,7 +153,7 @@ async function editMotorcycle(req, res) {
                 production_year=$6, color=$7
                 WHERE id=$8 AND user_id=$9;
             `,
-            [lisencePlate, ownerName, brand, type, cylinderCapacity, productionYear, color, motorcycleId, userId]
+            [newLisencePlate, newOwnerName, newBrand, newType, newCylinderCapacity, newProductionYear, newColor, motorcycleId, userId]
         );
 
         return res.status(200).json({
