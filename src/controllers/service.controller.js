@@ -112,9 +112,44 @@ async function changeServiceStatus(req, res) {
     }
 }
 
+async function getServiceById(req, res) {
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const service = await pool.query(
+            'SELECT * FROM services WHERE id=$1 AND user_id=$2;',
+            [serviceId, userId]
+        );
+
+        if (!service.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Found service',
+            data: {
+                service: service.rows[0]
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     getAllServices,
     addNewService,
     getAllServicesForUser,
-    changeServiceStatus
+    changeServiceStatus,
+    getServiceById
 };
