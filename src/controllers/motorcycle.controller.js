@@ -95,6 +95,13 @@ async function getMotorcycleById(req, res) {
             [motorcycleId]
         );
 
+        if (!motorcycle.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Motorcycle not found'
+            });
+        }
+
         if (!user.rows[0].is_admin && motorcycle.rows[0].user_id !== userId) {
             return res.status(401).json({
                 status: 'fail',
@@ -136,6 +143,13 @@ async function editMotorcycle(req, res) {
             'SELECT * FROM motorcycles WHERE id=$1;',
             [motorcycleId]
         );
+
+        if (!foundMotorcycle.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Motorcycle not found'
+            });
+        }
 
         const motorcycle = foundMotorcycle.rows[0];
         const newLisencePlate = lisencePlate ? lisencePlate : motorcycle.lisence_plate;
