@@ -124,6 +124,13 @@ async function editUserProfile(req, res) {
             'SELECT * FROM users WHERE id=$1;',
             [userId]
         );
+
+        if (!foundUser.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
     } catch (error) {
         return res.status(500).json({
             status: 'fail',
@@ -132,25 +139,6 @@ async function editUserProfile(req, res) {
     }
 
     const user = foundUser.rows[0];
-
-    // let newPassword = user.password;
-    // let newName = user.name;
-    // let newPhoneNumber = user.phone_number;
-    // let newAddress = user.address;
-
-    // if (password) {
-    //     newPassword = password;
-    // }
-    // if (name) {
-    //     newName = name;
-    // }
-    // if (phoneNumber) {
-    //     newPhoneNumber = phoneNumber;
-    // }
-    // if (address) {
-    //     newAddress = address;
-    // }
-
     const newPassword = password ? password : user.password;
     const newName = name ? name : user.name;
     const newPhoneNumber = phoneNumber ? phoneNumber : user.phone_number;
@@ -182,10 +170,17 @@ async function logoutUser(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        await pool.query(
-            'UPDATE users SET access_token=NULL WHERE id=$1;',
+        const user = await pool.query(
+            'UPDATE users SET access_token=NULL WHERE id=$1 RETURNING *;',
             [userId]
         );
+
+        if (!user.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
 
         return res.status(200).json({
             status: 'success',
@@ -208,6 +203,13 @@ async function getUser(req, res) {
             'SELECT id, email, name, phone_number, address FROM users WHERE id=$1;',
             [userId]
         );
+
+        if (!user.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
 
         const userData = user.rows[0];
         userData['phoneNumber'] = userData['phone_number'];
