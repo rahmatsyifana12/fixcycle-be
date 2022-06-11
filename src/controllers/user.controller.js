@@ -133,23 +133,28 @@ async function editUserProfile(req, res) {
 
     const user = foundUser.rows[0];
 
-    let newPassword = user.password;
-    let newName = user.name;
-    let newPhoneNumber = user.phone_number;
-    let newAddress = user.address;
+    // let newPassword = user.password;
+    // let newName = user.name;
+    // let newPhoneNumber = user.phone_number;
+    // let newAddress = user.address;
 
-    if (password) {
-        newPassword = password;
-    }
-    if (name) {
-        newName = name;
-    }
-    if (phoneNumber) {
-        newPhoneNumber = phoneNumber;
-    }
-    if (address) {
-        newAddress = address;
-    }
+    // if (password) {
+    //     newPassword = password;
+    // }
+    // if (name) {
+    //     newName = name;
+    // }
+    // if (phoneNumber) {
+    //     newPhoneNumber = phoneNumber;
+    // }
+    // if (address) {
+    //     newAddress = address;
+    // }
+
+    const newPassword = password ? password : user.password;
+    const newName = name ? name : user.name;
+    const newPhoneNumber = phoneNumber ? phoneNumber : user.phone_number;
+    const newAddress = address ? address : user.address;
 
     try {
         await pool.query(
