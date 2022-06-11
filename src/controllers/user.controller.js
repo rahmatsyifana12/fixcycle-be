@@ -168,7 +168,7 @@ async function getUser(req, res) {
 
     try {
         const user = await pool.query(
-            'SELECT id, email, name, phone_number, address FROM users WHERE id=$1;',
+            'SELECT id, email, name, phone_number AS phoneNumber, address FROM users WHERE id=$1;',
             [userId]
         );
 
