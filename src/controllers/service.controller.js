@@ -94,10 +94,17 @@ async function changeServiceStatus(req, res) {
             });
         }
 
-        await pool.query(
-            'UPDATE services SET status=$1 WHERE id=$2;',
+        const serviceToBeChanged = await pool.query(
+            'UPDATE services SET status=$1 WHERE id=$2 RETURNING *;',
             [serviceStatus, serviceId]
         );
+
+        if (!serviceToBeChanged.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
 
         return res.status(201).json({
             status: 'success',
