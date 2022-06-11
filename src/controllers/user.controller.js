@@ -118,6 +118,38 @@ async function editUserProfile(req, res) {
     const { password, name, phoneNumber, address } = req.body;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
+    let foundUser;
+    try {
+        foundUser = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+
+    const user = foundUser.rows[0];
+
+    let newPassword = user.password;
+    let newName = user.name;
+    let newPhoneNumber = user.phone_number;
+    let newAddress = user.address;
+
+    if (password) {
+        newPassword = password;
+    }
+    if (name) {
+        newName = name;
+    }
+    if (phoneNumber) {
+        newPhoneNumber = phoneNumber;
+    }
+    if (address) {
+        newAddress = address;
+    }
 
     try {
         await pool.query(
@@ -125,7 +157,7 @@ async function editUserProfile(req, res) {
                 UPDATE users SET password=$1, name=$2, phone_number=$3, address=$4
                 WHERE id=$5;
             `,
-            [password, name, phoneNumber, address, userId]
+            [newPassword, newName, newPhoneNumber, newAddress, userId]
         );
 
         return res.status(200).json({
