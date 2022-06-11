@@ -4,7 +4,22 @@ const pool = require("../db");
 const { ServiceStatus } = require('../validations/service.validation');
 
 async function getAllServices(req, res) {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
     try {
+        const user = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!user.rows[0].is_admin) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
         const services = await pool.query(
             'SELECT * FROM services;'
         );
