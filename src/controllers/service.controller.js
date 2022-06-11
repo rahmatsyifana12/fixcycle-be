@@ -125,12 +125,34 @@ async function getServiceById(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        const service = await pool.query(
-            'SELECT * FROM services WHERE id=$1 AND user_id=$2;',
-            [serviceId, userId]
+        const user = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
         );
 
-        if (!service.rowCount) {
+        const service = await pool.query(
+            'SELECT * FROM services WHERE id=$1;',
+            [serviceId]
+        );
+
+        if (service.rows[0].rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
+
+        if (user.rows[0].is_admin) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'Found service',
+                data: {
+                    service: service.rows[0]
+                }
+            });
+        }
+
+        if (service.rows[0].user_id !== userId) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Service not found'
@@ -143,7 +165,7 @@ async function getServiceById(req, res) {
             data: {
                 service: service.rows[0]
             }
-        })
+        });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({

@@ -95,6 +95,13 @@ async function getMotorcycleById(req, res) {
             [motorcycleId]
         );
 
+        if (!motorcycle.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Motorcycle not found'
+            });
+        }
+
         if (user.rows[0].is_admin) {
             return res.status(200).json({
                 status: 'success',
@@ -105,7 +112,7 @@ async function getMotorcycleById(req, res) {
             });
         }
 
-        if (!motorcycle.rowCount || motorcycle.rowCount && user.rows[0].id !== userId) {
+        if (user.rows[0].id !== userId) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Motorcycle not found'
