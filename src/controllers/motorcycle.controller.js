@@ -7,6 +7,7 @@ async function addNewMotorcycle(req, res) {
         name,
         brand, type,
         cylinderCapacity,
+        fuelType,
         productionYear,
         color
     } = req.body;
@@ -28,13 +29,14 @@ async function addNewMotorcycle(req, res) {
 
         await pool.query(
             `INSERT INTO motorcycles  (user_id, lisence_plate, name, brand, type, cylinder_capacity,
-                production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
+                fuel_type, production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
                 [
                     userId,
                     lisencePlate,
                     name,
                     brand, type,
                     cylinderCapacity,
+                    fuelType,
                     productionYear,
                     color
                 ]
@@ -142,6 +144,7 @@ async function editMotorcycle(req, res) {
         name,
         brand, type,
         cylinderCapacity,
+        fuelType,
         productionYear,
         color
     } = req.body;
@@ -168,6 +171,7 @@ async function editMotorcycle(req, res) {
         const newBrand = brand ? brand : motorcycle.brand;
         const newType = type ? type : motorcycle.type;
         const newCylinderCapacity = cylinderCapacity ? cylinderCapacity : motorcycle.cylinder_capacity;
+        const newFuelType = fuelType ? fuelType : motorcycle.fuel_type;
         const newProductionYear = productionYear ? productionYear : motorcycle.production_year;
         const newColor = color ? color : motorcycle.color;
 
@@ -175,10 +179,11 @@ async function editMotorcycle(req, res) {
             `
                 UPDATE motorcycles
                 SET lisence_plate=$1, name=$2, brand=$3, type=$4, cylinder_capacity=$5,
-                production_year=$6, color=$7
-                WHERE id=$8 AND user_id=$9;
+                fuel_type=$6, production_year=$7, color=$8
+                WHERE id=$9 AND user_id=$10;
             `,
-            [newLisencePlate, name, newBrand, newType, newCylinderCapacity, newProductionYear, newColor, motorcycleId, userId]
+            [newLisencePlate, newName, newBrand, newType, newCylinderCapacity, newFuelType,
+                newProductionYear, newColor, motorcycleId, userId]
         );
 
         return res.status(200).json({

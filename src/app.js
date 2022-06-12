@@ -33,6 +33,7 @@ app.listen(port, async () => {
                 brand VARCHAR(255) NOT NULL,
                 type VARCHAR(255) NOT NULL,
                 cylinder_capacity DECIMAL(19, 2) NOT NULL,
+                fuel_type VARCHAR(255) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
