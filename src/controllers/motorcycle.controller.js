@@ -4,7 +4,7 @@ const pool = require("../db");
 async function addNewMotorcycle(req, res) {
     const {
         lisencePlate,
-        ownerName,
+        name,
         brand, type,
         cylinderCapacity,
         productionYear,
@@ -27,12 +27,12 @@ async function addNewMotorcycle(req, res) {
         }
 
         await pool.query(
-            `INSERT INTO motorcycles  (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
+            `INSERT INTO motorcycles  (user_id, lisence_plate, name, brand, type, cylinder_capacity,
                 production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
                 [
                     userId,
                     lisencePlate,
-                    ownerName,
+                    name,
                     brand, type,
                     cylinderCapacity,
                     productionYear,
@@ -139,7 +139,7 @@ async function getMotorcycleById(req, res) {
 async function editMotorcycle(req, res) {
     const {
         lisencePlate,
-        ownerName,
+        name,
         brand, type,
         cylinderCapacity,
         productionYear,
@@ -164,7 +164,7 @@ async function editMotorcycle(req, res) {
 
         const motorcycle = foundMotorcycle.rows[0];
         const newLisencePlate = lisencePlate ? lisencePlate : motorcycle.lisence_plate;
-        const newOwnerName = ownerName ? ownerName : motorcycle.owner_name;
+        const newName = name ? name : motorcycle.name;
         const newBrand = brand ? brand : motorcycle.brand;
         const newType = type ? type : motorcycle.type;
         const newCylinderCapacity = cylinderCapacity ? cylinderCapacity : motorcycle.cylinder_capacity;
@@ -174,11 +174,11 @@ async function editMotorcycle(req, res) {
         await pool.query(
             `
                 UPDATE motorcycles
-                SET lisence_plate=$1, owner_name=$2, brand=$3, type=$4, cylinder_capacity=$5,
+                SET lisence_plate=$1, name=$2, brand=$3, type=$4, cylinder_capacity=$5,
                 production_year=$6, color=$7
                 WHERE id=$8 AND user_id=$9;
             `,
-            [newLisencePlate, newOwnerName, newBrand, newType, newCylinderCapacity, newProductionYear, newColor, motorcycleId, userId]
+            [newLisencePlate, name, newBrand, newType, newCylinderCapacity, newProductionYear, newColor, motorcycleId, userId]
         );
 
         return res.status(200).json({

@@ -29,7 +29,7 @@ app.listen(port, async () => {
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
                 lisence_plate VARCHAR(32) NOT NULL,
-                owner_name VARCHAR(255) NOT NULL,
+                name VARCHAR(255) NOT NULL,
                 brand VARCHAR(255) NOT NULL,
                 type VARCHAR(255) NOT NULL,
                 cylinder_capacity DECIMAL(19, 2) NOT NULL,
