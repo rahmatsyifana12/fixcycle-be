@@ -1,6 +1,6 @@
 const joi = require('joi');
 
-function validateHandler(schema, isParams = false) {
+function validate(schema, isParams = false) {
     return (req, res, next) => {
         let targetToValidate;
 
@@ -22,4 +22,4 @@ function validateHandler(schema, isParams = false) {
     }
 }
 
-module.exports = { validateHandler };
+module.exports = { validate };

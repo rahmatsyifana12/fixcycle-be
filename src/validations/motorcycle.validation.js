@@ -1,5 +1,11 @@
 const joi = require('joi');
 
+// const MotorcycleType = {
+//     CUB: 1,
+//     SCOOTER: 2,
+//     SPORT: 3
+// };
+
 const newMotorcycleSchema = joi.object({
     lisencePlate: joi.string()
         .alphanum()
@@ -17,7 +23,7 @@ const newMotorcycleSchema = joi.object({
     brand: joi.string()
         .required(),
 
-    type: joi.number()
+    type: joi.string()
         .required(),
 
     cylinderCapacity: joi.number()
@@ -27,12 +33,32 @@ const newMotorcycleSchema = joi.object({
         .required(),
 
     color: joi.string()
-        .required(),
-
-    fuelType: joi.string()
         .required()
 });
 
+const editMotorcycleSchema = joi.object({
+    lisencePlate: joi.string()
+        .alphanum(),
+
+    ownerName: joi.string()
+        .min(3)
+        .max(64)
+
+        .regex(/[a-zA-Z ]+/)
+        .rule({ message: '{#label} must only be alphabet' }),
+
+    brand: joi.string(),
+
+    type: joi.string(),
+
+    cylinderCapacity: joi.number(),
+
+    productionYear: joi.date(),
+
+    color: joi.string()
+});
+
 module.exports = {
-    newMotorcycleSchema
+    newMotorcycleSchema,
+    editMotorcycleSchema
 };

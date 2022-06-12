@@ -1,7 +1,7 @@
+const moment = require('moment');
 const pool = require('./db');
 const bcrypt = require('bcrypt');
 const config = require('./configs/config');
-const moment = require('moment');
 
 function getHashedPassword(rawPassword) {
     const hashedPassword = bcrypt.hashSync(
@@ -39,7 +39,6 @@ async function runSeeder() {
                 cylinder_capacity DECIMAL(19, 2) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
-                fuel_type VARCHAR(32) NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );`
         );
@@ -49,8 +48,8 @@ async function runSeeder() {
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
                 motorcycle_id INT NOT NULL,
-                service_type SMALLINT NOT NULL,
-                service_request VARCHAR(1023),
+                type SMALLINT NOT NULL,
+                request VARCHAR(1023),
                 service_time TIMESTAMP NOT NULL,
                 status SMALLINT NOT NULL,
                 created_at TIMESTAMP NOT NULL,
@@ -66,22 +65,22 @@ async function runSeeder() {
                 ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE),
                 ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE)
             `,
-            [getHashedPassword('johndoe123'), getHashedPassword('maryjane123'), getHashedPassword('admin123')]
+            [getHashedPassword('Johndoe123'), getHashedPassword('Maryjane123'), getHashedPassword('Admin123')]
         );
 
         await pool.query(
             `
-                INSERT INTO motorcycles (user_id, lisence_plate, owner_name, brand, type, cylinder_capacity,
+                INSERT INTO motorcycles (user_id, lisence_plate, name, brand, type, cylinder_capacity,
                 production_year, color) VALUES
-                (1, 'A 123 BC', 'John Doe', 'Yamaha', 'Sport', '255', '2019-05-23', 'Blue'),
-                (1, 'D 456 DD', 'Rahmat Syifana', 'Honda', 'Trail', '155', '2015-01-22', 'Red'),
-                (2, 'E 23 DXS', 'Richard Stevan', 'Honda', 'Sport', '155', '2016-11-12', 'Green');
+                (1, 'A123BC', 'X Max', 'Yamaha', 'Matic', 255, '2019-05-23', 'Blue'),
+                (1, 'D456DD', 'CB', 'Honda', 'Sport', 155', '2015-01-22, 'Red'),
+                (2, 'E23DXS', 'Revo', 'Honda', 'Bebek', 125, '2016-11-12', 'Green');
             `
         );
 
         await pool.query(
             `
-                INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, status, created_at)
+                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, status, created_at)
                 VALUES (1, 1, 1, 'Fix flat tires', '2022-07-22 12:12:00', 1, $1),
                 (2, 1, 2, 'Perbaiki handle kopling', '2022-06-30 14:12:00', 1, $2);
             `,

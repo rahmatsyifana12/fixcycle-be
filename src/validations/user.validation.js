@@ -40,4 +40,24 @@ const newUserSchema = joi.object({
         .max(255)
 });
 
-module.exports = { newUserSchema };
+const editProfileSchema = joi.object({
+    password: passwordSchema,
+
+    name: joi.string()
+        .min(3)
+        .max(64)
+
+        .regex(/[a-zA-Z ]+/)
+        .rule({ message: '{#label} must only be alphabet' }),
+
+    phoneNumber: joi.string()
+        .max(64)
+
+        .regex(/[0-9]+/)
+        .rule({ message: '{#label} must be numbers' }),
+
+    address: joi.string()
+        .max(255)
+});
+
+module.exports = { newUserSchema, editProfileSchema };

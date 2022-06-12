@@ -1,17 +1,25 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const pool = require("../db");
-
-const ServiceStatus = {
-    PENDING: 1,
-    WAITING: 2,
-    ONGOING: 3,
-    FINISH: 4,
-    DECLINED: 5
-};
+const { ServiceStatus } = require('../validations/service.validation');
 
 async function getAllServices(req, res) {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
     try {
+        const user = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!user.rows[0].is_admin) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
         const services = await pool.query(
             'SELECT * FROM services;'
         );
@@ -37,8 +45,7 @@ async function getAllServicesForUser(req, res) {
 
     try {
         const services = await pool.query(
-            'SELECT * FROM services WHERE user_id=$1;',
-            [userId]
+            'SELECT * FROM services WHERE user_id=$1;', [userId]
         );
 
         return res.status(200).json({
@@ -57,17 +64,17 @@ async function getAllServicesForUser(req, res) {
 }
 
 async function addNewService(req, res) {
-    const { serviceType, serviceRequest } = req.body;
-    const { motorcycleId } = req.params;
+    const { motorcycleId, serviceType, serviceRequest, serviceTime } = req.body;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
     const dateNow = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
     try {
         await pool.query(
-            `INSERT INTO services (user_id, motorcycle_id, service_type, service_request, service_time, status, created_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-            [userId, motorcycleId, serviceType, serviceRequest, '2022-01-31 14:12:00', 1, dateNow]
+            `
+                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, status, created_at)
+                VALUES ($1, $2, $3, $4, $5, $6, $7);
+            `, [userId, motorcycleId, serviceType, serviceRequest, serviceTime, ServiceStatus.PENDING, dateNow]
         );
 
         return res.status(201).json({
@@ -84,12 +91,109 @@ async function addNewService(req, res) {
 }
 
 async function changeServiceStatus(req, res) {
-    
+    const { serviceStatus } = req.body;
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const isAdmin = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!isAdmin.rowCount) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
+        const serviceToBeChanged = await pool.query(
+            'UPDATE services SET status=$1 WHERE id=$2 RETURNING *;',
+            [serviceStatus, serviceId]
+        );
+
+        if (!serviceToBeChanged.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
+
+        return res.status(201).json({
+            status: 'success',
+            message: 'Successfully updated a service status'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
+async function getServiceById(req, res) {
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const user = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        const service = await pool.query(
+            'SELECT * FROM services WHERE id=$1;',
+            [serviceId]
+        );
+
+        if (service.rows[0].rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
+
+        if (user.rows[0].is_admin) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'Found service',
+                data: {
+                    service: service.rows[0]
+                }
+            });
+        }
+
+        if (service.rows[0].user_id !== userId) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Found service',
+            data: {
+                service: service.rows[0]
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
 }
 
 module.exports = {
     getAllServices,
     addNewService,
     getAllServicesForUser,
-    changeServiceStatus
+    changeServiceStatus,
+    getServiceById
 };

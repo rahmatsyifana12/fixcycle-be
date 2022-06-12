@@ -79,7 +79,7 @@ async function loginUser(req, res) {
         if (!bcrypt.compareSync(password, user.password)) {
             return res.status(400).json({
                 status: 'fail',
-                message: 'Object or value is invalid'
+                message: 'Incorrect password'
             });
         }
 
@@ -114,15 +114,73 @@ async function loginUser(req, res) {
     }
 }
 
+async function editUserProfile(req, res) {
+    const { password, name, phoneNumber, address } = req.body;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+    let foundUser;
+    try {
+        foundUser = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!foundUser.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+
+    const user = foundUser.rows[0];
+    const newPassword = password ? password : user.password;
+    const newName = name ? name : user.name;
+    const newPhoneNumber = phoneNumber ? phoneNumber : user.phone_number;
+    const newAddress = address ? address : user.address;
+
+    try {
+        await pool.query(
+            `
+                UPDATE users SET password=$1, name=$2, phone_number=$3, address=$4
+                WHERE id=$5;
+            `,
+            [newPassword, newName, newPhoneNumber, newAddress, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated a user profile'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 async function logoutUser(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        await pool.query(
-            'UPDATE users SET access_token=NULL WHERE id=$1;',
+        const user = await pool.query(
+            'UPDATE users SET access_token=NULL WHERE id=$1 RETURNING *;',
             [userId]
         );
+
+        if (!user.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
 
         return res.status(200).json({
             status: 'success',
@@ -136,8 +194,46 @@ async function logoutUser(req, res) {
     }
 }
 
+async function getUser(req, res) {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const user = await pool.query(
+            'SELECT id, email, name, phone_number, address FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!user.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
+
+        const userData = user.rows[0];
+        userData['phoneNumber'] = userData['phone_number'];
+        delete userData['phone_number'];
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully found user',
+            data: {
+                user: userData
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     addNewUser,
     loginUser,
-    logoutUser
+    editUserProfile,
+    logoutUser,
+    getUser
 };

@@ -1,25 +1,36 @@
-Running in port 5000
+Frontend repository: https://github.com/leonardo-lim/fixcycle
 
-### Getting Started
-```
-# install dependencies
-npm install
-
-# initialize your env
-cp .env.example .env
-
-# generate token secret
-npm run jwt:generate
-
-# seed data into database
-npm run seed
-
-# start the project
-npm run start
-```
+Running at port 5000
 
 ### Technologies
 * JavaScript
 * Node.js
 * Express.js
 * PostgreSQL
+
+### Getting Started
+
+#### Install dependencies
+```
+npm install
+```
+
+#### Initialize your env
+```
+cp .env.example .env
+```
+
+#### Generate token secret
+```
+npm run jwt:generate
+```
+
+#### Seed data into database
+```
+npm run seed
+```
+
+#### Start the project
+```
+npm run start
+```

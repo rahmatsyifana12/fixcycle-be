@@ -35,7 +35,6 @@ app.listen(port, async () => {
                 cylinder_capacity DECIMAL(19, 2) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
-                fuel_type VARCHAR(32) NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );`
         );
@@ -45,8 +44,8 @@ app.listen(port, async () => {
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
                 motorcycle_id INT NOT NULL,
-                service_type SMALLINT NOT NULL,
-                service_request VARCHAR(1023),
+                type SMALLINT NOT NULL,
+                request VARCHAR(1023),
                 service_time TIMESTAMP NOT NULL,
                 status SMALLINT NOT NULL,
                 created_at TIMESTAMP NOT NULL,
