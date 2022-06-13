@@ -60,16 +60,32 @@ async function getAllMotorcyclesForUser(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        const motorcycles = await pool.query(
+        const rawMotorcycles = await pool.query(
             'SELECT * FROM motorcycles WHERE user_id=$1;',
             [userId]
         );
+
+        const motorcycles = rawMotorcycles.rows.map((motorcycle) => {
+            motorcycle['licensePlate'] = motorcycle['license_plate'];
+            delete motorcycle['license_plate'];
+
+            motorcycle['userId'] = motorcycle['user_id'];
+            delete motorcycle['user_id'];
+
+            motorcycle['cylinderCapacity'] = motorcycle['cylinder_capacity'];
+            delete motorcycle['cylinder_capacity'];
+
+            motorcycle['fuelType'] = motorcycle['fuel_type'];
+            delete motorcycle['fuel_type'];
+
+            return motorcycle;
+        })
 
         return res.status(200).json({
             status: 'success',
             message: 'Found all motorcycles for user',
             data: {
-                motorcycles: motorcycles.rows
+                motorcycles
             }
         });
     } catch (error) {
