@@ -2,10 +2,9 @@ const joi = require('joi');
 
 const ServiceStatus = {
     PENDING: 1,
-    WAITING: 2,
-    ONGOING: 3,
-    FINISH: 4,
-    DECLINED: 5
+    ONGOING: 2,
+    DONE: 3,
+    CANCELED: 4
 };
 
 const ServiceType = {

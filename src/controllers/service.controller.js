@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const pool = require("../db");
-const { ServiceStatus } = require('../validations/service.validation');
+const { ServiceStatus, ServiceType } = require('../validations/service.validation');
 
 async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
@@ -235,12 +235,80 @@ async function getServiceById(req, res) {
     }
 }
 
-// async function
+async function addPayment(req, res) {
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const rawService = await pool.query(
+            'SELECT type, motorcycle_id FROM services WHERE id=$1;',
+            serviceId
+        );
+
+        const serviceType = rawService.rows[0].type;
+        const motorcycleId = rawService.rows[0].motorcycle_id;
+
+        const rawMotorcycle = await pool.query(
+            'SELECT cylinder_capacity FROM motorcycles WHERE id=$1;',
+            [motorcycleId]
+        );
+
+        const cylinderCapacity = rawMotorcycle.rows[0].cylinder_capacity;
+        const additionalFee = 0;
+        const adminFee = 5000;
+
+        let serviceTypeCost;
+        if (serviceType === ServiceType.FULL_SERVICE) {
+            serviceTypeCost = 200000;
+        } else {
+            serviceTypeCost = 100000;
+        }
+
+        let cylinderCapacityCost;
+        if (cylinderCapacity < 150) {
+            cylinderCapacityCost = 50000;
+        }
+        else if (cylinderCapacity >= 150 && cylinderCapacity < 250) {
+            cylinderCapacityCost = 100000;
+        }
+        else if (cylinderCapacity >= 250) {
+            cylinderCapacityCost = 150000;
+        }
+
+        const totalCost = serviceTypeCost + cylinderCapacityCost + additionalFee + adminFee;
+
+        await pool.query(
+            `
+
+            `
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully created a payment',
+            data: {
+                totalCost,
+                serviceTypeCost,
+                cylinderCapacityCost,
+                additionalFee,
+                adminFee
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
 
 module.exports = {
     getAllServices,
     addNewService,
     getAllServicesForUser,
     changeServiceStatus,
-    getServiceById
+    getServiceById,
+    addPayment
 };
