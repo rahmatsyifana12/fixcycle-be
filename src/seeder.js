@@ -32,7 +32,7 @@ async function runSeeder() {
             `CREATE TABLE IF NOT EXISTS motorcycles (
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
-                lisence_plate VARCHAR(32) NOT NULL,
+                license_plate VARCHAR(32) NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 brand VARCHAR(255) NOT NULL,
                 type VARCHAR(255) NOT NULL,
@@ -71,7 +71,7 @@ async function runSeeder() {
 
         await pool.query(
             `
-                INSERT INTO motorcycles (user_id, lisence_plate, name, brand, type, cylinder_capacity,
+                INSERT INTO motorcycles (user_id, license_plate, name, brand, type, cylinder_capacity,
                 fuel_type, production_year, color) VALUES
                 (1, 'A123BC', 'X Max', 'Yamaha', 'Matic', 255, 'Pertamax', '2019-05-23', 'Blue'),
                 (1, 'D456DD', 'CB', 'Honda', 'Sport', 155, 'Pertamax', '2015-01-22', 'Red'),

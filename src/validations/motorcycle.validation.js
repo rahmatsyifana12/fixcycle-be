@@ -7,7 +7,7 @@ const joi = require('joi');
 // };
 
 const newMotorcycleSchema = joi.object({
-    lisencePlate: joi.string()
+    licensePlate: joi.string()
         .alphanum()
         .required(),
 
@@ -37,7 +37,7 @@ const newMotorcycleSchema = joi.object({
 });
 
 const editMotorcycleSchema = joi.object({
-    lisencePlate: joi.string()
+    licensePlate: joi.string()
         .alphanum(),
 
     name: joi.string()

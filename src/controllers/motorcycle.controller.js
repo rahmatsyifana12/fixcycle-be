@@ -3,7 +3,7 @@ const pool = require("../db");
 
 async function addNewMotorcycle(req, res) {
     const {
-        lisencePlate,
+        licensePlate,
         name,
         brand, type,
         cylinderCapacity,
@@ -17,7 +17,7 @@ async function addNewMotorcycle(req, res) {
     try {
         const motorcycles = await pool.query(
             'SELECT * FROM motorcycles WHERE user_id=$1 AND lisence_plate=$2;',
-            [userId, lisencePlate]
+            [userId, licensePlate]
         );
 
         if (motorcycles.rowCount > 0) {
@@ -32,7 +32,7 @@ async function addNewMotorcycle(req, res) {
                 fuel_type, production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
                 [
                     userId,
-                    lisencePlate,
+                    licensePlate,
                     name,
                     brand, type,
                     cylinderCapacity,
@@ -140,7 +140,7 @@ async function getMotorcycleById(req, res) {
 
 async function editMotorcycle(req, res) {
     const {
-        lisencePlate,
+        licensePlate,
         name,
         brand, type,
         cylinderCapacity,
@@ -166,7 +166,7 @@ async function editMotorcycle(req, res) {
         }
 
         const motorcycle = foundMotorcycle.rows[0];
-        const newLisencePlate = lisencePlate ? lisencePlate : motorcycle.lisence_plate;
+        const newLicensePlate = licensePlate ? licensePlate : motorcycle.lisence_plate;
         const newName = name ? name : motorcycle.name;
         const newBrand = brand ? brand : motorcycle.brand;
         const newType = type ? type : motorcycle.type;
@@ -182,7 +182,7 @@ async function editMotorcycle(req, res) {
                 fuel_type=$6, production_year=$7, color=$8
                 WHERE id=$9 AND user_id=$10;
             `,
-            [newLisencePlate, newName, newBrand, newType, newCylinderCapacity, newFuelType,
+            [newLicensePlate, newName, newBrand, newType, newCylinderCapacity, newFuelType,
                 newProductionYear, newColor, motorcycleId, userId]
         );
 

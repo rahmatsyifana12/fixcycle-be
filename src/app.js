@@ -28,7 +28,7 @@ app.listen(port, async () => {
             `CREATE TABLE IF NOT EXISTS motorcycles (
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
-                lisence_plate VARCHAR(32) NOT NULL,
+                license_plate VARCHAR(32) NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 brand VARCHAR(255) NOT NULL,
                 type VARCHAR(255) NOT NULL,
