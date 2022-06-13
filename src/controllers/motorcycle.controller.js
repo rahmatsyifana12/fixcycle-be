@@ -78,6 +78,9 @@ async function getAllMotorcyclesForUser(req, res) {
             motorcycle['fuelType'] = motorcycle['fuel_type'];
             delete motorcycle['fuel_type'];
 
+            motorcycle['productionYear'] = motorcycle['production_year'];
+            delete motorcycle['production_year'];
+
             return motorcycle;
         })
 
