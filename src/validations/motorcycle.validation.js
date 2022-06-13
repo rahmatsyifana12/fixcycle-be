@@ -11,12 +11,9 @@ const newMotorcycleSchema = joi.object({
         .alphanum()
         .required(),
 
-    ownerName: joi.string()
+    name: joi.string()
         .min(3)
         .max(64)
-
-        .regex(/[a-zA-Z ]+/)
-        .rule({ message: '{#label} must only be alphabet' })
 
         .required(),
 
@@ -33,6 +30,9 @@ const newMotorcycleSchema = joi.object({
         .required(),
 
     color: joi.string()
+        .required(),
+
+    fuelType: joi.string()
         .required()
 });
 
@@ -40,12 +40,9 @@ const editMotorcycleSchema = joi.object({
     lisencePlate: joi.string()
         .alphanum(),
 
-    ownerName: joi.string()
+    name: joi.string()
         .min(3)
-        .max(64)
-
-        .regex(/[a-zA-Z ]+/)
-        .rule({ message: '{#label} must only be alphabet' }),
+        .max(64),
 
     brand: joi.string(),
 
@@ -55,7 +52,9 @@ const editMotorcycleSchema = joi.object({
 
     productionYear: joi.date(),
 
-    color: joi.string()
+    color: joi.string(),
+
+    fuelType: joi.string()
 });
 
 module.exports = {
