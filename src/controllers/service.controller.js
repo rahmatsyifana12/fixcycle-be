@@ -20,15 +20,31 @@ async function getAllServices(req, res) {
             });
         }
 
-        const services = await pool.query(
+        const rawServices = await pool.query(
             'SELECT * FROM services;'
         );
+
+        const services = rawServices.rows.map((service) => {
+            service['userId'] = service['user_id'];
+            delete service['user_id'];
+
+            service['motorcycleId'] = service['motorcycle_id'];
+            delete service['motorcycle_id'];
+
+            service['serviceTime'] = service['service_time'];
+            delete service['service_time'];
+
+            service['createdAt'] = service['created_at'];
+            delete service['created_at'];
+
+            return service;
+        });
 
         return res.status(200).json({
             status: 'success',
             message: 'Services found',
             data: {
-                services: services.rows
+                services
             }
         });
     } catch (error) {
@@ -44,15 +60,31 @@ async function getAllServicesForUser(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        const services = await pool.query(
+        const rawServices = await pool.query(
             'SELECT * FROM services WHERE user_id=$1;', [userId]
         );
+
+        const services = rawServices.rows.map((service) => {
+            service['userId'] = service['user_id'];
+            delete service['user_id'];
+
+            service['motorcycleId'] = service['motorcycle_id'];
+            delete service['motorcycle_id'];
+
+            service['serviceTime'] = service['service_time'];
+            delete service['service_time'];
+
+            service['createdAt'] = service['created_at'];
+            delete service['created_at'];
+
+            return service;
+        });
 
         return res.status(200).json({
             status: 'success',
             message: 'Services found',
             data: {
-                services: services.rows
+                services
             }
         });
     } catch (error) {
@@ -145,24 +177,37 @@ async function getServiceById(req, res) {
             [userId]
         );
 
-        const service = await pool.query(
+        const rawService = await pool.query(
             'SELECT * FROM services WHERE id=$1;',
             [serviceId]
         );
 
-        if (service.rows[0].rowCount) {
+        if (rawService.rows[0].rowCount) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Service not found'
             });
         }
 
+        const service = rawService.rows[0];
+        service['userId'] = service['user_id'];
+        delete service['user_id'];
+
+        service['motorcycleId'] = service['motorcycle_id'];
+        delete service['motorcycle_id'];
+
+        service['serviceTime'] = service['service_time'];
+        delete service['service_time'];
+
+        service['createdAt'] = service['created_at'];
+        delete service['created_at'];
+
         if (user.rows[0].is_admin) {
             return res.status(200).json({
                 status: 'success',
                 message: 'Found service',
                 data: {
-                    service: service.rows[0]
+                    service
                 }
             });
         }
