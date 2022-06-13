@@ -212,7 +212,7 @@ async function getServiceById(req, res) {
             });
         }
 
-        if (service.rows[0].user_id !== userId) {
+        if (service.userId !== userId) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Service not found'
@@ -223,7 +223,7 @@ async function getServiceById(req, res) {
             status: 'success',
             message: 'Found service',
             data: {
-                service: service.rows[0]
+                service
             }
         });
     } catch (error) {

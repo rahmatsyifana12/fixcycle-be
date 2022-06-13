@@ -108,17 +108,33 @@ async function getMotorcycleById(req, res) {
             [userId]
         );
 
-        const motorcycle = await pool.query(
+        const rawMotorcycle = await pool.query(
             'SELECT * FROM motorcycles WHERE id=$1;',
             [motorcycleId]
         );
 
-        if (!motorcycle.rowCount) {
+        if (!rawMotorcycle.rowCount) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Motorcycle not found'
             });
         }
+
+        const motorcycle = rawMotorcycle.rows[0];
+        motorcycle['licensePlate'] = motorcycle['license_plate'];
+        delete motorcycle['license_plate'];
+
+        motorcycle['userId'] = motorcycle['user_id'];
+        delete motorcycle['user_id'];
+
+        motorcycle['cylinderCapacity'] = motorcycle['cylinder_capacity'];
+        delete motorcycle['cylinder_capacity'];
+
+        motorcycle['fuelType'] = motorcycle['fuel_type'];
+        delete motorcycle['fuel_type'];
+
+        motorcycle['productionYear'] = motorcycle['production_year'];
+        delete motorcycle['production_year'];
 
         if (user.rows[0].is_admin) {
             return res.status(200).json({
@@ -130,19 +146,18 @@ async function getMotorcycleById(req, res) {
             });
         }
 
-        if (motorcycle.rows[0].user_id !== userId) {
+        if (motorcycle.userId !== userId) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Motorcycle not found'
             });
         }
-        console.log(user.rows[0].id);
 
         return res.status(200).json({
             status: 'success',
             message: 'Found motorcycle',
             data: {
-                motorcycle: motorcycle.rows[0]
+                motorcycle
             }
         });
     } catch (error) {
