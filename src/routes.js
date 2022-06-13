@@ -23,7 +23,7 @@ router.post('/api/v1/motorcycles',
     validate(newMotorcycleSchema),
     addNewMotorcycle);
 router.post('/api/v1/services', authenticate, addNewService);
-router.post('/api/v1/payments', authenticate, addPayment);
+// router.post('/api/v1/payments', authenticate, addPayment);
 
 router.put('/api/v1/users', authenticate, validate(editProfileSchema), editUserProfile);
 router.put('/api/v1/motorcycles/:motorcycleId',
