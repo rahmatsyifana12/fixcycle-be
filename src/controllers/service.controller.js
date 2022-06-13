@@ -235,6 +235,8 @@ async function getServiceById(req, res) {
     }
 }
 
+// async function
+
 module.exports = {
     getAllServices,
     addNewService,
