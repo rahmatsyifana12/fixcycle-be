@@ -16,7 +16,7 @@ async function addNewMotorcycle(req, res) {
 
     try {
         const motorcycles = await pool.query(
-            'SELECT * FROM motorcycles WHERE user_id=$1 AND lisence_plate=$2;',
+            'SELECT * FROM motorcycles WHERE user_id=$1 AND license_plate=$2;',
             [userId, licensePlate]
         );
 
@@ -28,7 +28,7 @@ async function addNewMotorcycle(req, res) {
         }
 
         await pool.query(
-            `INSERT INTO motorcycles  (user_id, lisence_plate, name, brand, type, cylinder_capacity,
+            `INSERT INTO motorcycles  (user_id, license_plate, name, brand, type, cylinder_capacity,
                 fuel_type, production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
                 [
                     userId,
@@ -166,7 +166,7 @@ async function editMotorcycle(req, res) {
         }
 
         const motorcycle = foundMotorcycle.rows[0];
-        const newLicensePlate = licensePlate ? licensePlate : motorcycle.lisence_plate;
+        const newLicensePlate = licensePlate ? licensePlate : motorcycle.license_plate;
         const newName = name ? name : motorcycle.name;
         const newBrand = brand ? brand : motorcycle.brand;
         const newType = type ? type : motorcycle.type;
@@ -178,7 +178,7 @@ async function editMotorcycle(req, res) {
         await pool.query(
             `
                 UPDATE motorcycles
-                SET lisence_plate=$1, name=$2, brand=$3, type=$4, cylinder_capacity=$5,
+                SET license_plate=$1, name=$2, brand=$3, type=$4, cylinder_capacity=$5,
                 fuel_type=$6, production_year=$7, color=$8
                 WHERE id=$9 AND user_id=$10;
             `,
