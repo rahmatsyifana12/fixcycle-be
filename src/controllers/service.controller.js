@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const pool = require("../db");
-const { ServiceStatus, ServiceType } = require('../validations/service.validation');
+const { ServiceStatus, ServiceType, PaymentStatus } = require('../validations/service.validation');
 
 async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
@@ -292,7 +292,7 @@ async function getPaymentDetails(req, res) {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Successfully created a payment',
+            message: 'Successfully found payment details',
             data: {
                 totalCost,
                 serviceTypeCost,
@@ -310,11 +310,36 @@ async function getPaymentDetails(req, res) {
     }
 }
 
+async function addPayment(req, res) {
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        await pool.query(`
+        INSERT INTO payments (service_id, total_cost, status) VALUES ($1, 200000, $2)
+        `, [serviceId, PaymentStatus.PENDING]);
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully add a payment'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
+
 module.exports = {
     getAllServices,
     addNewService,
     getAllServicesForUser,
     changeServiceStatus,
     getServiceById,
-    getPaymentDetails
+    getPaymentDetails,
+    addPayment
 };

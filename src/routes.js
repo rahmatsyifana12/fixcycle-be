@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { addNewMotorcycle, getAllMotorcyclesForUser, getMotorcycleById, editMotorcycle, deleteMotorcycle } = require('./controllers/motorcycle.controller');
-const { getAllServices, addNewService, getAllServicesForUser, changeServiceStatus, getServiceById, getPaymentDetails } = require('./controllers/service.controller');
+const { getAllServices, addNewService, getAllServicesForUser, changeServiceStatus, getServiceById, getPaymentDetails, addPayment } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile, getUser } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
 const { validate } = require('./middlewares/validate.middleware');
@@ -23,6 +23,7 @@ router.post('/api/v1/motorcycles',
     validate(newMotorcycleSchema),
     addNewMotorcycle);
 router.post('/api/v1/services', authenticate, addNewService);
+router.post('/api/v1/payments/:serviceId', authenticate, addPayment);
 // router.post('/api/v1/payments', authenticate, addPayment);
 
 router.put('/api/v1/users', authenticate, validate(editProfileSchema), editUserProfile);
