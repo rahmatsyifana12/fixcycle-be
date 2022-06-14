@@ -130,7 +130,7 @@ async function changeServiceStatus(req, res) {
 
     try {
         const isAdmin = await pool.query(
-            'SELECT * FROM users WHERE id=$1;',
+            'SELECT * FROM users WHERE id=$1 AND is_admin=TRUE;',
             [userId]
         );
 
@@ -241,6 +241,18 @@ async function addPayment(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
+        const isAdmin = await pool.query(
+            'SELECT * FROM users WHERE id=$1 AND is_admin=TRUE;',
+            [userId]
+        );
+
+        if (!isAdmin.rowCount) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
         const rawService = await pool.query(
             'SELECT type, motorcycle_id FROM services WHERE id=$1;',
             serviceId
@@ -277,12 +289,6 @@ async function addPayment(req, res) {
         }
 
         const totalCost = serviceTypeCost + cylinderCapacityCost + additionalFee + adminFee;
-
-        await pool.query(
-            `
-
-            `
-        );
 
         return res.status(200).json({
             status: 'success',

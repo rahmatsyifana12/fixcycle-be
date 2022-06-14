@@ -54,6 +54,15 @@ app.listen(port, async () => {
                 FOREIGN KEY (motorcycle_id) REFERENCES motorcycles(id)
             );`
         );
+
+        await pool.query(
+            `CREATE TABLE IF NOT EXISTS payments (
+                id SERIAL NOT NULL PRIMARY KEY,
+                service_id INT NOT NULL,
+                total_cost INT NOT NULL,
+                status BOOLEAN NOT NULL
+            );`
+        );
     } catch (error) {
         console.log(error);
     }
