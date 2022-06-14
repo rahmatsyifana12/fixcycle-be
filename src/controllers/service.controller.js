@@ -235,7 +235,7 @@ async function getServiceById(req, res) {
     }
 }
 
-async function addPayment(req, res) {
+async function getPaymentDetails(req, res) {
     const { serviceId } = req.params;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
@@ -316,5 +316,5 @@ module.exports = {
     getAllServicesForUser,
     changeServiceStatus,
     getServiceById,
-    addPayment
+    getPaymentDetails
 };

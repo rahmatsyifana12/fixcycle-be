@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { addNewMotorcycle, getAllMotorcyclesForUser, getMotorcycleById, editMotorcycle, deleteMotorcycle } = require('./controllers/motorcycle.controller');
-const { getAllServices, addNewService, getAllServicesForUser, changeServiceStatus, getServiceById, addPayment } = require('./controllers/service.controller');
+const { getAllServices, addNewService, getAllServicesForUser, changeServiceStatus, getServiceById, getPaymentDetails } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile, getUser } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
 const { validate } = require('./middlewares/validate.middleware');

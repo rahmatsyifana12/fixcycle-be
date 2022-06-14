@@ -12,6 +12,11 @@ const ServiceType = {
     LIGHT_SERVICE: 2
 };
 
+const PaymentStatus = {
+    PENDING: 1,
+    DONE: 2,
+}
+
 const newServiceSchema = joi.object({
 
 });
@@ -19,5 +24,6 @@ const newServiceSchema = joi.object({
 module.exports = {
     ServiceStatus,
     ServiceType,
-    newServiceSchema
+    newServiceSchema,
+    PaymentStatus
 };
