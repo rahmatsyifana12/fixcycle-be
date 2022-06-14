@@ -316,6 +316,18 @@ async function addPayment(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
+        const isAdmin = await pool.query(
+            'SELECT * FROM users WHERE id=$1 AND is_admin=TRUE;',
+            [userId]
+        );
+
+        if (!isAdmin.rowCount) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
         await pool.query(`
         INSERT INTO payments (service_id, total_cost, status) VALUES ($1, 200000, $2)
         `, [serviceId, PaymentStatus.PENDING]);

@@ -14,8 +14,8 @@ const ServiceType = {
 
 const PaymentStatus = {
     PENDING: 1,
-    DONE: 2,
-}
+    DONE: 2
+};
 
 const newServiceSchema = joi.object({
 
