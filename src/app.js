@@ -45,7 +45,7 @@ app.listen(port, async () => {
                 id SERIAL NOT NULL PRIMARY KEY,
                 user_id INT NOT NULL,
                 motorcycle_id INT NOT NULL,
-                type SMALLINT NOT NULL,
+                type INT NOT NULL,
                 request VARCHAR(1023),
                 service_time TIMESTAMP NOT NULL,
                 service_status INT NOT NULL,
