@@ -337,10 +337,22 @@ async function addPayment(req, res) {
             });
         }
 
+        const serviceToBeAddPayment = await pool.query(
+            'SELECT * FROM services WHERE id=$1;',
+            [serviceId]
+        );
+
+        if (serviceToBeAddPayment.rows[0].service_status !== ServiceStatus.DONE) {
+            return res.status(400).json({
+                status: 'success',
+                message: 'Service is not done or has been canceled'
+            });
+        }
+
         await pool.query(`
         INSERT INTO payments (service_id, total_cost, status) VALUES ($1, 200000, $2)
         `, [serviceId, PaymentStatus.PENDING]);
-
+        
         return res.status(200).json({
             status: 'success',
             message: 'Successfully add a payment'
