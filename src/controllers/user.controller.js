@@ -215,6 +215,9 @@ async function getUser(req, res) {
         userData['phoneNumber'] = userData['phone_number'];
         delete userData['phone_number'];
 
+        userData['isAdmin'] = userData['is_admin'];
+        delete userData['is_admin'];
+
         return res.status(200).json({
             status: 'success',
             message: 'Successfully found user',
