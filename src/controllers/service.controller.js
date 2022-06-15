@@ -31,6 +31,9 @@ async function getAllServices(req, res) {
             service['motorcycleId'] = service['motorcycle_id'];
             delete service['motorcycle_id'];
 
+            service['serviceStatus'] = service['service_status'];
+            delete service['service_status'];
+
             service['serviceTime'] = service['service_time'];
             delete service['service_time'];
 
@@ -71,6 +74,9 @@ async function getAllServicesForUser(req, res) {
             service['motorcycleId'] = service['motorcycle_id'];
             delete service['motorcycle_id'];
 
+            service['serviceStatus'] = service['service_status'];
+            delete service['service_status'];
+
             service['serviceTime'] = service['service_time'];
             delete service['service_time'];
 
@@ -104,7 +110,7 @@ async function addNewService(req, res) {
     try {
         await pool.query(
             `
-                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, status, created_at)
+                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, service_status, created_at)
                 VALUES ($1, $2, $3, $4, $5, $6, $7);
             `, [userId, motorcycleId, serviceType, serviceRequest, serviceTime, ServiceStatus.PENDING, dateNow]
         );
@@ -142,7 +148,7 @@ async function changeServiceStatus(req, res) {
         }
 
         const serviceToBeChanged = await pool.query(
-            'UPDATE services SET status=$1 WHERE id=$2 RETURNING *;',
+            'UPDATE services SET service_status=$1 WHERE id=$2 RETURNING *;',
             [serviceStatus, serviceId]
         );
 
@@ -195,6 +201,9 @@ async function getServiceById(req, res) {
 
         service['motorcycleId'] = service['motorcycle_id'];
         delete service['motorcycle_id'];
+
+        service['serviceStatus'] = service['service_status'];
+        delete service['service_status'];
 
         service['serviceTime'] = service['service_time'];
         delete service['service_time'];
