@@ -200,7 +200,7 @@ async function getUser(req, res) {
 
     try {
         const user = await pool.query(
-            'SELECT id, email, name, phone_number, address FROM users WHERE id=$1;',
+            'SELECT id, email, name, phone_number, is_admin address FROM users WHERE id=$1;',
             [userId]
         );
 
@@ -214,6 +214,9 @@ async function getUser(req, res) {
         const userData = user.rows[0];
         userData['phoneNumber'] = userData['phone_number'];
         delete userData['phone_number'];
+
+        userData['isAdmin'] = userData['is_admin'];
+        delete userData['is_admin'];
 
         return res.status(200).json({
             status: 'success',
