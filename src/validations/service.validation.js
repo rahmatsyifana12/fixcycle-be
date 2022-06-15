@@ -8,8 +8,8 @@ const ServiceStatus = {
 };
 
 const ServiceType = {
-    FULL_SERVICE: 1,
-    LIGHT_SERVICE: 2
+    LIGHT_SERVICE: 1,
+    FULL_SERVICE: 2
 };
 
 const PaymentStatus = {
