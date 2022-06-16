@@ -276,10 +276,67 @@ async function deleteMotorcycle(req, res) {
     }
 }
 
+async function getAllMotorcycles(req, res) {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const isAdmin = await pool.query(
+            'SELECT * FROM users WHERE id=$1 AND is_admin=TRUE;',
+            [userId]
+        );
+
+        if (!isAdmin.rowCount) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+
+        const rawMotorcycles = await pool.query(
+            'SELECT * FROM motorcycles;'
+        );
+
+        const motorcycles = rawMotorcycles.rows.map((motorcycle) => {
+            motorcycle['licensePlate'] = motorcycle['license_plate'];
+            delete motorcycle['license_plate'];
+
+            motorcycle['userId'] = motorcycle['user_id'];
+            delete motorcycle['user_id'];
+
+            motorcycle['cylinderCapacity'] = motorcycle['cylinder_capacity'];
+            delete motorcycle['cylinder_capacity'];
+
+            motorcycle['fuelType'] = motorcycle['fuel_type'];
+            delete motorcycle['fuel_type'];
+
+            motorcycle['productionYear'] = motorcycle['production_year'];
+            delete motorcycle['production_year'];
+
+            return motorcycle;
+        })
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Found all motorcycles',
+            data: {
+                motorcycles
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     addNewMotorcycle,
     getAllMotorcyclesForUser,
     getMotorcycleById,
     editMotorcycle,
-    deleteMotorcycle
+    deleteMotorcycle,
+    getAllMotorcycles
 };
