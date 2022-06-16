@@ -6,6 +6,7 @@ Frontend repository: https://github.com/leonardo-lim/fixcycle
 * Express.js
 * PostgreSQL
 * JWT
+* bcrypt
 
 ### Getting Started
 
