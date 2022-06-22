@@ -33,6 +33,9 @@ const newMotorcycleSchema = joi.object({
         .required(),
 
     fuelType: joi.string()
+        .required(),
+
+    isDelete: joi.boolean()
         .required()
 });
 

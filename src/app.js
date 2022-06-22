@@ -36,6 +36,7 @@ app.listen(port, async () => {
                 fuel_type VARCHAR(255) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
+                is_deleted BOOLEAN NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );`
         );
@@ -56,11 +57,11 @@ app.listen(port, async () => {
         );
 
         await pool.query(
-            `CREATE TABLE IF NOT EXISTS payments (
+            `CREATE TABLE IF NOT EXISTS invoices (
                 id SERIAL NOT NULL PRIMARY KEY,
                 service_id INT NOT NULL,
                 total_cost INT NOT NULL,
-                status BOOLEAN NOT NULL
+                is_paid BOOLEAN NOT NULL
             );`
         );
     } catch (error) {

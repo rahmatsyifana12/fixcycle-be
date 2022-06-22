@@ -29,7 +29,7 @@ async function addNewMotorcycle(req, res) {
 
         await pool.query(
             `INSERT INTO motorcycles  (user_id, license_plate, name, brand, type, cylinder_capacity,
-                fuel_type, production_year, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
+                fuel_type, production_year, color, is_delete) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE);`,
                 [
                     userId,
                     licensePlate,
@@ -80,6 +80,9 @@ async function getAllMotorcyclesForUser(req, res) {
 
             motorcycle['productionYear'] = motorcycle['production_year'];
             delete motorcycle['production_year'];
+
+            motorcycle['isDeleted'] = motorcycle['is_deleted'];
+            delete motorcycle['is_deleted'];
 
             return motorcycle;
         })
@@ -138,6 +141,9 @@ async function getMotorcycleById(req, res) {
 
         motorcycle['productionYear'] = motorcycle['production_year'];
         delete motorcycle['production_year'];
+
+        motorcycle['isDeleted'] = motorcycle['is_deleted'];
+        delete motorcycle['is_deleted'];
 
         if (user.rows[0].is_admin) {
             return res.status(200).json({
@@ -312,6 +318,9 @@ async function getAllMotorcycles(req, res) {
 
             motorcycle['productionYear'] = motorcycle['production_year'];
             delete motorcycle['production_year'];
+
+            motorcycle['isDeleted'] = motorcycle['is_deleted'];
+            delete motorcycle['is_deleted'];
 
             return motorcycle;
         })
