@@ -32,8 +32,8 @@ async function addNewUser(req, res) {
 
     try {
         await pool.query(
-            `INSERT INTO users (email, password, name, phone_number, address, is_admin)
-            VALUES ($1, $2, $3, $4, $5, FALSE);`,
+            `INSERT INTO users (email, password, name, phone_number, address, is_admin, balance)
+            VALUES ($1, $2, $3, $4, $5, FALSE, 0);`,
             [email, hashedPassword, name, phoneNumber, address]
         );
 
@@ -200,7 +200,7 @@ async function getUser(req, res) {
 
     try {
         const user = await pool.query(
-            'SELECT id, email, name, phone_number, address, is_admin FROM users WHERE id=$1;',
+            'SELECT id, email, name, phone_number, address,     is_admin FROM users WHERE id=$1;',
             [userId]
         );
 

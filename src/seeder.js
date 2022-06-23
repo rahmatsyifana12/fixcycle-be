@@ -24,6 +24,7 @@ async function runSeeder() {
                 phone_number VARCHAR(255),
                 address VARCHAR(255),
                 is_admin BOOLEAN NOT NULL,
+                balance INT NOT NULL,
                 access_token VARCHAR(255)
             );`
         );
@@ -62,10 +63,10 @@ async function runSeeder() {
 
         await pool.query(
             `
-                INSERT INTO users (email, password, name, phone_number, address, is_admin)
-                VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE),
-                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE),
-                ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE)
+                INSERT INTO users (email, password, name, phone_number, address, is_admin, balance)
+                VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE, 0),
+                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE, 0),
+                ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE, 0)
             `,
             [getHashedPassword('Johndoe123'), getHashedPassword('Maryjane123'), getHashedPassword('Admin123')]
         );
