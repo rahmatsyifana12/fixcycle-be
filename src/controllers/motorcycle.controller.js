@@ -29,7 +29,7 @@ async function addNewMotorcycle(req, res) {
 
         await pool.query(
             `INSERT INTO motorcycles  (user_id, license_plate, name, brand, type, cylinder_capacity,
-                fuel_type, production_year, color, is_delete) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE);`,
+                fuel_type, production_year, color, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE);`,
                 [
                     userId,
                     licensePlate,
