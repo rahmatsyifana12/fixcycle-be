@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const pool = require("../db");
+const { ServiceStatus } = require('../validations/service.validation');
 
 async function addNewMotorcycle(req, res) {
     const {
@@ -250,7 +251,8 @@ async function deleteMotorcycle(req, res) {
             [userId, motorcycleId]
         );
 
-        if (service.rowCount > 0) {
+        if (service.rowCount > 0 && (service.rows[0].status === ServiceStatus.PENDING
+            || service.rows[0].status === ServiceStatus.ONGOING)) {
             return res.status(400).json({
                 status: 'fail',
                 message: 'Failed to delete motorcycle'
@@ -258,7 +260,7 @@ async function deleteMotorcycle(req, res) {
         }
 
         const motorcycleToBeDeleted = await pool.query(
-            'DELETE FROM motorcycles WHERE id=$1 AND user_id=$2 RETURNING *;',
+            'UPDATE motorcycles SET is_deleted=TRUE WHERE id=$1 AND user_id=$2 RETURNING *;',
             [motorcycleId, userId]
         );
 
