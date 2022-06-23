@@ -233,10 +233,47 @@ async function getUser(req, res) {
     }
 }
 
+async function editBalance(req, res) {
+    const { balance } =req.body;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const rawUser = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!rawUser.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            });
+        }
+
+        rawUser.rows[0].balance = balance ?? rawUser.rows[0].balance;
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully edited user balance',
+            data: {
+                user: userData
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     addNewUser,
     loginUser,
     editUserProfile,
     logoutUser,
-    getUser
+    getUser,
+    editBalance
 };
