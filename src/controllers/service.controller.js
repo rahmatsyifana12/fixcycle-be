@@ -352,7 +352,7 @@ async function addPayment(req, res) {
         await pool.query(`
         INSERT INTO payments (service_id, total_cost, status) VALUES ($1, 200000, $2)
         `, [serviceId, PaymentStatus.PENDING]);
-        
+
         return res.status(200).json({
             status: 'success',
             message: 'Successfully add a payment'

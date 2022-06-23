@@ -24,6 +24,7 @@ async function runSeeder() {
                 phone_number VARCHAR(255),
                 address VARCHAR(255),
                 is_admin BOOLEAN NOT NULL,
+                balance INT NOT NULL,
                 access_token VARCHAR(255)
             );`
         );
@@ -40,6 +41,7 @@ async function runSeeder() {
                 fuel_type VARCHAR(255) NOT NULL,
                 production_year DATE NOT NULL,
                 color VARCHAR(32) NOT NULL,
+                is_deleted BOOLEAN NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );`
         );
@@ -61,10 +63,10 @@ async function runSeeder() {
 
         await pool.query(
             `
-                INSERT INTO users (email, password, name, phone_number, address, is_admin)
-                VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE),
-                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE),
-                ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE)
+                INSERT INTO users (email, password, name, phone_number, address, is_admin, balance)
+                VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE, 0),
+                ('maryjane@example.com', $2, 'Mary Jane', '08123456789', 'Surabaya, Jawa Timur', FALSE, 0),
+                ('admin1@example.com', $3, 'Admin 1', '0812000001', 'Jakarta Pusat, DKI Jakarta', TRUE, 0)
             `,
             [getHashedPassword('Johndoe123'), getHashedPassword('Maryjane123'), getHashedPassword('Admin123')]
         );
@@ -72,10 +74,10 @@ async function runSeeder() {
         await pool.query(
             `
                 INSERT INTO motorcycles (user_id, license_plate, name, brand, type, cylinder_capacity,
-                fuel_type, production_year, color) VALUES
-                (1, 'A123BC', 'X Max', 'Yamaha', 'Matic', 255, 'Pertamax', '2019-05-23', 'Blue'),
-                (1, 'D456DD', 'CB', 'Honda', 'Sport', 155, 'Pertamax', '2015-01-22', 'Red'),
-                (2, 'E23DXS', 'Revo', 'Honda', 'Bebek', 125, 'Pertalite', '2016-11-12', 'Green');
+                fuel_type, production_year, color, is_deleted) VALUES
+                (1, 'A123BC', 'X Max', 'Yamaha', 'Matic', 255, 'Pertamax', '2019-05-23', 'Blue', FALSE),
+                (1, 'D456DD', 'CB', 'Honda', 'Sport', 155, 'Pertamax', '2015-01-22', 'Red', FALSE),
+                (2, 'E23DXS', 'Revo', 'Honda', 'Bebek', 125, 'Pertalite', '2016-11-12', 'Green', FALSE);
             `
         );
 
