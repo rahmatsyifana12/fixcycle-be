@@ -199,7 +199,7 @@ async function editMotorcycle(req, res) {
             [motorcycleId]
         );
 
-        if (!foundMotorcycle.rowCount) {
+        if (!foundMotorcycle.rowCount || foundMotorcycle.rows[0].is_deleted) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'Motorcycle not found'
