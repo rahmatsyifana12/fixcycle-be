@@ -57,7 +57,9 @@ const editMotorcycleSchema = joi.object({
 
     color: joi.string(),
 
-    fuelType: joi.string()
+    fuelType: joi.string(),
+
+    isDeleted: joi.boolean()
 });
 
 module.exports = {

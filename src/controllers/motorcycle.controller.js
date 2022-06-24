@@ -232,7 +232,6 @@ async function editMotorcycle(req, res) {
             message: 'Successfully updated a motorcycle'
         });
     } catch (error) {
-        console.log(error.message);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
