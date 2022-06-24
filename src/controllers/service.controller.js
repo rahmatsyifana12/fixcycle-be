@@ -366,6 +366,48 @@ async function addPayment(req, res) {
     }
 }
 
+async function deleteService(req, res) {
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        const rawService = await pool.query(
+            'SELECT * FROM services WHERE id=$1 AND user_id=$2;',
+            [serviceId, userId]
+        );
+
+        if (!rawService.rowCount) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Service not found'
+            });
+        }
+
+        if (rawService.rows[0].status === ServiceStatus.ONGOING) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Fail to delete service'
+            });
+        }
+
+        await pool.query(
+            'DELETE from services WHERE id=$1 AND user_id=$2;',
+            [serviceId, userId]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully add a payment'
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
 
 module.exports = {
     getAllServices,
@@ -374,5 +416,6 @@ module.exports = {
     changeServiceStatus,
     getServiceById,
     getPaymentDetails,
-    addPayment
+    addPayment,
+    deleteService
 };

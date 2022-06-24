@@ -1,6 +1,22 @@
 const { Router } = require('express');
-const { addNewMotorcycle, getAllMotorcyclesForUser, getMotorcycleById, editMotorcycle, deleteMotorcycle, getAllMotorcycles } = require('./controllers/motorcycle.controller');
-const { getAllServices, addNewService, getAllServicesForUser, changeServiceStatus, getServiceById, getPaymentDetails, addPayment } = require('./controllers/service.controller');
+const {
+    addNewMotorcycle,
+    getAllMotorcyclesForUser,
+    getMotorcycleById,
+    editMotorcycle,
+    deleteMotorcycle,
+    getAllMotorcycles
+} = require('./controllers/motorcycle.controller');
+const {
+    getAllServices,
+    addNewService,
+    getAllServicesForUser,
+    changeServiceStatus,
+    getServiceById,
+    getPaymentDetails,
+    addPayment,
+    deleteService
+} = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile, getUser, editBalance } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
 const { validate } = require('./middlewares/validate.middleware');
@@ -37,5 +53,6 @@ router.put('/api/v1/users/balance', authenticate, editBalance);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
 router.delete('/api/v1/motorcycles/:motorcycleId', authenticate, deleteMotorcycle);
+router.delete('api/v1/services/', authenticate, deleteService);
 
 module.exports = router;
