@@ -234,7 +234,7 @@ async function getUser(req, res) {
 }
 
 async function editBalance(req, res) {
-    const { balance } =req.body;
+    const { balance } = req.body;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
 
@@ -251,14 +251,16 @@ async function editBalance(req, res) {
             });
         }
 
-        rawUser.rows[0].balance = balance ?? rawUser.rows[0].balance;
+        const updatedBalance = rawUser.rows[0].balance + balance;
+
+        await pool.query(
+            'UPDATE users SET balance=$1 WHERE id=$2;',
+            [updatedBalance, userId]
+        );
 
         return res.status(200).json({
             status: 'success',
-            message: 'Successfully edited user balance',
-            data: {
-                user: userData
-            }
+            message: 'Successfully edited user balance'
         });
     } catch (error) {
         console.log(error.message);
