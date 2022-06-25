@@ -37,7 +37,10 @@ const newUserSchema = joi.object({
         .rule({ message: '{#label} must be numbers' }),
 
     address: joi.string()
-        .max(255)
+        .max(255),
+
+    balance: joi.number()
+        .required()
 });
 
 const editProfileSchema = joi.object({
@@ -57,7 +60,9 @@ const editProfileSchema = joi.object({
         .rule({ message: '{#label} must be numbers' }),
 
     address: joi.string()
-        .max(255)
+        .max(255),
+
+    balance: joi.number()
 });
 
 module.exports = { newUserSchema, editProfileSchema };
