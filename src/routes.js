@@ -15,7 +15,8 @@ const {
     getServiceById,
     getPaymentDetails,
     addPayment,
-    deleteService
+    deleteService,
+    payService
 } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile, getUser, editBalance } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
@@ -41,7 +42,7 @@ router.post('/api/v1/motorcycles',
     addNewMotorcycle);
 router.post('/api/v1/services', authenticate, addNewService);
 router.post('/api/v1/payments/:serviceId', authenticate, addPayment);
-// router.post('/api/v1/payments', authenticate, addPayment);
+router.post('/api/v1/services/pay/:serviceId', authenticate, payService);
 
 router.put('/api/v1/users', authenticate, validate(editProfileSchema), editUserProfile);
 router.put('/api/v1/motorcycles/:motorcycleId',

@@ -409,6 +409,22 @@ async function deleteService(req, res) {
     }
 }
 
+async function payService(req, res) {
+    const { serviceId } = req.params;
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
+
+    try {
+        
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     getAllServices,
     addNewService,
@@ -417,5 +433,6 @@ module.exports = {
     getServiceById,
     getPaymentDetails,
     addPayment,
-    deleteService
+    deleteService,
+    payService
 };

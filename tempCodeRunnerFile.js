@@ -1,2 +1,0 @@
-
-        maxim = arr[i];
