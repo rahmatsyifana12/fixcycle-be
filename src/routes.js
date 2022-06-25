@@ -54,6 +54,6 @@ router.put('/api/v1/users/balance', authenticate, editBalance);
 
 router.delete('/api/v1/logout', authenticate, logoutUser);
 router.delete('/api/v1/motorcycles/:motorcycleId', authenticate, deleteMotorcycle);
-router.delete('api/v1/services/', authenticate, deleteService);
+router.delete('api/v1/services/serviceId', authenticate, deleteService);
 
 module.exports = router;
