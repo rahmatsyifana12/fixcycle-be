@@ -33,6 +33,7 @@ router.get('/api/v1/motorcycles/user', authenticate, getAllMotorcyclesForUser);
 router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById);
 router.get('/api/v1/services/:serviceId', authenticate, getServiceById);
 router.get('/api/v1/motorcycles', authenticate, getAllMotorcycles);
+router.get('/api/v1/payments/:serviceId', authenticate, getPaymentDetails);
 
 router.post('/api/v1/register', validate(newUserSchema), addNewUser);
 router.post('/api/v1/login', loginUser);
