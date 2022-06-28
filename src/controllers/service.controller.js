@@ -344,8 +344,8 @@ async function addInvoice(req, res) {
         }
 
         await pool.query(`
-        INSERT INTO invoices (service_id, total_cost, status) VALUES ($1, 200000, $2)
-        `, [serviceId, PaymentStatus.PENDING]);
+        INSERT INTO invoices (service_id, total_cost, is_paid) VALUES ($1, 200000, FALSE)
+        `, [serviceId]);
 
         return res.status(200).json({
             status: 'success',
