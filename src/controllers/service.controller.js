@@ -244,7 +244,7 @@ async function getServiceById(req, res) {
     }
 }
 
-async function getPaymentDetails(req, res) {
+async function getInvoiceDetails(req, res) {
     const { serviceId } = req.params;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
@@ -255,7 +255,7 @@ async function getPaymentDetails(req, res) {
             [userId]
         );
 
-        if (!isAdmin.rowCount) {
+        if (isAdmin.rowCount) {
             return res.status(401).json({
                 status: 'fail',
                 message: 'Unauthorized error'
@@ -301,7 +301,7 @@ async function getPaymentDetails(req, res) {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Successfully found payment details',
+            message: 'Successfully found invoice details',
             data: {
                 totalCost,
                 serviceTypeCost,
@@ -319,7 +319,7 @@ async function getPaymentDetails(req, res) {
     }
 }
 
-async function addPayment(req, res) {
+async function addInvoice(req, res) {
     const { serviceId } = req.params;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
@@ -337,12 +337,12 @@ async function addPayment(req, res) {
             });
         }
 
-        const serviceToBeAddPayment = await pool.query(
+        const serviceToBeAddInvoice = await pool.query(
             'SELECT * FROM services WHERE id=$1;',
             [serviceId]
         );
 
-        if (serviceToBeAddPayment.rows[0].service_status !== ServiceStatus.DONE) {
+        if (serviceToBeAddInvoice.rows[0].service_status !== ServiceStatus.DONE) {
             return res.status(400).json({
                 status: 'success',
                 message: 'Service is not done or has been canceled'
@@ -350,12 +350,12 @@ async function addPayment(req, res) {
         }
 
         await pool.query(`
-        INSERT INTO payments (service_id, total_cost, status) VALUES ($1, 200000, $2)
+        INSERT INTO invoices (service_id, total_cost, status) VALUES ($1, 200000, $2)
         `, [serviceId, PaymentStatus.PENDING]);
 
         return res.status(200).json({
             status: 'success',
-            message: 'Successfully add a payment'
+            message: 'Successfully add an invoice'
         });
     } catch (error) {
         console.log(error.message);
@@ -409,13 +409,53 @@ async function deleteService(req, res) {
     }
 }
 
-async function payService(req, res) {
+async function payInvoice(req, res) {
     const { serviceId } = req.params;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        
+        const rawUser = await pool.query(
+            'SELECT * FROM users WHERE id=$1;',
+            [userId]
+        );
+
+        if (!rawUser.rowCount) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Unauthorized error'
+            });
+        }
+        const user = rawUser.rows[0];
+
+        const rawInvoice = await pool.query(
+            'SELECT * FROM invoices WHERE service_id=$1;',
+            [serviceId]
+        );
+        const invoice = rawInvoice.rows[0];
+
+        if (invoice.total_cost > user.balance) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Your balance is not enough'
+            });
+        }
+
+        const newBalance = user.balance - invoice.total_cost;
+        await pool.query(
+            'UPDATE users SET balance=$1 WHERE id=$2;',
+            [newBalance, userId]
+        );
+
+        await pool.query(
+            'UPDATE invoices SET is_paid=TRUE WHERE id=$1;',
+            [invoice.id]
+        );
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully paid an invoice'
+        });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({
@@ -431,8 +471,8 @@ module.exports = {
     getAllServicesForUser,
     changeServiceStatus,
     getServiceById,
-    getPaymentDetails,
-    addPayment,
+    getInvoiceDetails,
+    addInvoice,
     deleteService,
-    payService
+    payInvoice
 };

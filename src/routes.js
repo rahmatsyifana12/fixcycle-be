@@ -13,10 +13,10 @@ const {
     getAllServicesForUser,
     changeServiceStatus,
     getServiceById,
-    getPaymentDetails,
-    addPayment,
     deleteService,
-    payService
+    getInvoiceDetails,
+    addInvoice,
+    payInvoice
 } = require('./controllers/service.controller');
 const { addNewUser, loginUser, logoutUser, editUserProfile, getUser, editBalance } = require('./controllers/user.controller');
 const { authenticate } = require('./middlewares/authenticate.middleware');
@@ -33,7 +33,7 @@ router.get('/api/v1/motorcycles/user', authenticate, getAllMotorcyclesForUser);
 router.get('/api/v1/motorcycles/:motorcycleId', authenticate, getMotorcycleById);
 router.get('/api/v1/services/:serviceId', authenticate, getServiceById);
 router.get('/api/v1/motorcycles', authenticate, getAllMotorcycles);
-router.get('/api/v1/payments/:serviceId', authenticate, getPaymentDetails);
+router.get('/api/v1/invoices/:serviceId', authenticate, getInvoiceDetails);
 
 router.post('/api/v1/register', validate(newUserSchema), addNewUser);
 router.post('/api/v1/login', loginUser);
@@ -42,8 +42,8 @@ router.post('/api/v1/motorcycles',
     validate(newMotorcycleSchema),
     addNewMotorcycle);
 router.post('/api/v1/services', authenticate, addNewService);
-router.post('/api/v1/payments/:serviceId', authenticate, addPayment);
-router.post('/api/v1/services/pay/:serviceId', authenticate, payService);
+router.post('/api/v1/invoices/:serviceId', authenticate, addInvoice);
+router.post('/api/v1/invoices/pay/:serviceId', authenticate, payInvoice);
 
 router.put('/api/v1/users', authenticate, validate(editProfileSchema), editUserProfile);
 router.put('/api/v1/motorcycles/:motorcycleId',
