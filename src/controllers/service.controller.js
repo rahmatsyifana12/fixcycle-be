@@ -255,6 +255,7 @@ async function getInvoiceDetails(req, res) {
             [serviceId]
         );
 
+        console.log(rawService.rows[0]);
         const serviceType = rawService.rows[0].type;
         const motorcycleId = rawService.rows[0].motorcycle_id;
 
