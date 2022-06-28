@@ -83,9 +83,10 @@ async function runSeeder() {
 
         await pool.query(
             `
-                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, service_status, created_at)
-                VALUES (1, 1, 1, 'Fix flat tires', '2022-07-22 11:12 PM', 1, $1),
-                (2, 3, 2, 'Perbaiki handle kopling', '2022-06-30 14:12:00', 1, $2);
+                INSERT INTO services (user_id, motorcycle_id, type, request, service_time,
+                    service_status, pick_up_and_drop, created_at)
+                VALUES (1, 1, 1, 'Fix flat tires', '2022-07-22 11:12 PM', 1, FALSE, $1),
+                (2, 3, 2, 'Perbaiki handle kopling', '2022-06-30 14:12:00', 1, TRUE, $2);
             `,
             [dateNow, dateNow]
         );

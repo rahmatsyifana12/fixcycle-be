@@ -262,6 +262,7 @@ async function getInvoiceDetails(req, res) {
 
         const serviceType = rawService.rows[0].type;
         const motorcycleId = rawService.rows[0].motorcycle_id;
+        const pickUpAndDrop = rawService.rows[0].pick_up_and_drop;
 
         const rawMotorcycle = await pool.query(
             'SELECT cylinder_capacity FROM motorcycles WHERE id=$1;',
@@ -269,7 +270,7 @@ async function getInvoiceDetails(req, res) {
         );
 
         const cylinderCapacity = rawMotorcycle.rows[0].cylinder_capacity;
-        const additionalFee = 0;
+        let additionalFee = 0;
         const adminFee = 5000;
 
         let serviceTypeCost;
@@ -277,6 +278,10 @@ async function getInvoiceDetails(req, res) {
             serviceTypeCost = 200000;
         } else {
             serviceTypeCost = 100000;
+        }
+
+        if (pickUpAndDrop) {
+            additionalFee += 25000;
         }
 
         let cylinderCapacityCost;

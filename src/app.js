@@ -51,6 +51,7 @@ app.listen(port, async () => {
                 request VARCHAR(1023),
                 service_time TIMESTAMP NOT NULL,
                 service_status INT NOT NULL,
+                pick_up_and_drop BOOLEAN NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (motorcycle_id) REFERENCES motorcycles(id)
