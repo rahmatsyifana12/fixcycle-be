@@ -250,14 +250,9 @@ async function getInvoiceDetails(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
-        const isAdmin = await pool.query(
-            'SELECT * FROM users WHERE id=$1 AND is_admin=TRUE;',
-            [userId]
-        );
-
         const rawService = await pool.query(
             'SELECT type, motorcycle_id FROM services WHERE id=$1;',
-            serviceId
+            [serviceId]
         );
 
         const serviceType = rawService.rows[0].type;
