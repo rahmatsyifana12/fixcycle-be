@@ -251,7 +251,7 @@ async function getInvoiceDetails(req, res) {
 
     try {
         const rawService = await pool.query(
-            'SELECT type, motorcycle_id FROM services WHERE id=$1;',
+            'SELECT * FROM services WHERE id=$1;',
             [serviceId]
         );
 
