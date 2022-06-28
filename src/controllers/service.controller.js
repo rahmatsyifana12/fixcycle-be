@@ -255,13 +255,6 @@ async function getInvoiceDetails(req, res) {
             [userId]
         );
 
-        if (isAdmin.rowCount) {
-            return res.status(401).json({
-                status: 'fail',
-                message: 'Unauthorized error'
-            });
-        }
-
         const rawService = await pool.query(
             'SELECT type, motorcycle_id FROM services WHERE id=$1;',
             serviceId
