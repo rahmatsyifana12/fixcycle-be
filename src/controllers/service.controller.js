@@ -250,6 +250,11 @@ async function getInvoiceDetails(req, res) {
     const userId = jwt.decode(accessToken).userId;
 
     try {
+        const rawInvoice = await pool.query(
+            'SELECT * FROM invoices WHERE service_id=$1;',
+            [serviceId]
+        );
+
         const rawService = await pool.query(
             'SELECT * FROM services WHERE id=$1;',
             [serviceId]
@@ -295,7 +300,8 @@ async function getInvoiceDetails(req, res) {
                 serviceTypeCost,
                 cylinderCapacityCost,
                 additionalFee,
-                adminFee
+                adminFee,
+                isPaid: rawInvoice.rows[0].is_paid
             }
         });
     } catch (error) {
