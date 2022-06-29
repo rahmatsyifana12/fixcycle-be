@@ -70,6 +70,9 @@ async function getAllServices(req, res) {
             service['createdAt'] = service['created_at'];
             delete service['created_at'];
 
+            service['pickUpAndDrop'] = service['pick_up_and_drop'];
+            delete service['pick_up_and_drop'];
+
             return service;
         });
 
@@ -112,6 +115,9 @@ async function getAllServicesForUser(req, res) {
 
             service['createdAt'] = service['created_at'];
             delete service['created_at'];
+
+            service['pickUpAndDrop'] = service['pick_up_and_drop'];
+            delete service['pick_up_and_drop'];
 
             return service;
         });
@@ -240,6 +246,9 @@ async function getServiceById(req, res) {
 
         service['createdAt'] = service['created_at'];
         delete service['created_at'];
+
+        service['pickUpAndDrop'] = service['pick_up_and_drop'];
+        delete service['pick_up_and_drop'];
 
         if (user.rows[0].is_admin) {
             return res.status(200).json({
