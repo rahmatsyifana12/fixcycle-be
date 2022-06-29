@@ -138,7 +138,7 @@ async function getAllServicesForUser(req, res) {
 }
 
 async function addNewService(req, res) {
-    const { motorcycleId, type, request, serviceTime } = req.body;
+    const { motorcycleId, type, request, serviceTime, pickUpAndDrop } = req.body;
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
     const dateNow = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
@@ -146,9 +146,10 @@ async function addNewService(req, res) {
     try {
         await pool.query(
             `
-                INSERT INTO services (user_id, motorcycle_id, type, request, service_time, service_status, created_at)
-                VALUES ($1, $2, $3, $4, $5, $6, $7);
-            `, [userId, motorcycleId, type, request, serviceTime, ServiceStatus.PENDING, dateNow]
+                INSERT INTO services (user_id, motorcycle_id, type, request, service_time,
+                    service_status, pick_up_and_drop, created_at)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+            `, [userId, motorcycleId, type, request, serviceTime, ServiceStatus.PENDING, pickUpAndDrop, dateNow]
         );
 
         return res.status(201).json({
