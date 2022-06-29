@@ -244,10 +244,38 @@ async function getServiceById(req, res) {
     }
 }
 
+function getInvoiceData(serviceType, pickUpAndDrop, cylinderCapacity) {
+    const adminFee = 5000;
+    let serviceTypeCost = 0;
+    if (serviceType === ServiceType.FULL_SERVICE) {
+        serviceTypeCost = 200000;
+    } else {
+        serviceTypeCost = 100000;
+    }
+
+    let additionalFee = 0;
+    if (pickUpAndDrop) {
+        additionalFee += 25000;
+    }
+
+    let cylinderCapacityCost = 0;
+    if (cylinderCapacity < 150) {
+        cylinderCapacityCost = 50000;
+    }
+    else if (cylinderCapacity >= 150 && cylinderCapacity < 250) {
+        cylinderCapacityCost = 100000;
+    }
+    else if (cylinderCapacity >= 250) {
+        cylinderCapacityCost = 150000;
+    }
+
+    const totalCost = serviceTypeCost + cylinderCapacityCost + additionalFee + adminFee;
+
+    return { totalCost, serviceTypeCost, cylinderCapacityCost, additionalFee, adminFee };
+}
+
 async function getInvoiceDetails(req, res) {
     const { serviceId } = req.params;
-    const accessToken = req.headers['authorization'].split(' ')[1];
-    const userId = jwt.decode(accessToken).userId;
 
     try {
         const rawInvoice = await pool.query(
@@ -270,32 +298,10 @@ async function getInvoiceDetails(req, res) {
         );
 
         const cylinderCapacity = rawMotorcycle.rows[0].cylinder_capacity;
-        let additionalFee = 0;
-        const adminFee = 5000;
 
-        let serviceTypeCost;
-        if (serviceType === ServiceType.FULL_SERVICE) {
-            serviceTypeCost = 200000;
-        } else {
-            serviceTypeCost = 100000;
-        }
-
-        if (pickUpAndDrop) {
-            additionalFee += 25000;
-        }
-
-        let cylinderCapacityCost;
-        if (cylinderCapacity < 150) {
-            cylinderCapacityCost = 50000;
-        }
-        else if (cylinderCapacity >= 150 && cylinderCapacity < 250) {
-            cylinderCapacityCost = 100000;
-        }
-        else if (cylinderCapacity >= 250) {
-            cylinderCapacityCost = 150000;
-        }
-
-        const totalCost = serviceTypeCost + cylinderCapacityCost + additionalFee + adminFee;
+        const {
+            totalCost, serviceTypeCost, cylinderCapacityCost, additionalFee, adminFee
+        } = getInvoiceData(serviceType, pickUpAndDrop, cylinderCapacity);
 
         return res.status(200).json({
             status: 'success',
@@ -348,9 +354,22 @@ async function addInvoice(req, res) {
             });
         }
 
+        const serviceType = rawService.rows[0].type;
+        const motorcycleId = rawService.rows[0].motorcycle_id;
+        const pickUpAndDrop = rawService.rows[0].pick_up_and_drop;
+
+        const rawMotorcycle = await pool.query(
+            'SELECT cylinder_capacity FROM motorcycles WHERE id=$1;',
+            [motorcycleId]
+        );
+
+        const cylinderCapacity = rawMotorcycle.rows[0].cylinder_capacity;
+
+        const { totalCost } = getInvoiceData(serviceType, pickUpAndDrop, cylinderCapacity);
+
         await pool.query(`
-        INSERT INTO invoices (service_id, total_cost, is_paid) VALUES ($1, 200000, FALSE)
-        `, [serviceId]);
+        INSERT INTO invoices (service_id, total_cost, is_paid) VALUES ($1, $2, FALSE)
+        `, [serviceId, totalCost]);
 
         return res.status(200).json({
             status: 'success',
