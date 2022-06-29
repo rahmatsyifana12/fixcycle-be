@@ -3,6 +3,36 @@ const moment = require('moment');
 const pool = require("../db");
 const { ServiceStatus, ServiceType, PaymentStatus } = require('../validations/service.validation');
 
+function getInvoiceData(serviceType, pickUpAndDrop, cylinderCapacity) {
+    const adminFee = 5000;
+    let serviceTypeCost = 0;
+    if (serviceType === ServiceType.FULL_SERVICE) {
+        serviceTypeCost = 200000;
+    } else {
+        serviceTypeCost = 100000;
+    }
+
+    let additionalFee = 0;
+    if (pickUpAndDrop) {
+        additionalFee += 25000;
+    }
+
+    let cylinderCapacityCost = 0;
+    if (cylinderCapacity < 150) {
+        cylinderCapacityCost = 50000;
+    }
+    else if (cylinderCapacity >= 150 && cylinderCapacity < 250) {
+        cylinderCapacityCost = 100000;
+    }
+    else if (cylinderCapacity >= 250) {
+        cylinderCapacityCost = 150000;
+    }
+
+    const totalCost = serviceTypeCost + cylinderCapacityCost + additionalFee + adminFee;
+
+    return { totalCost, serviceTypeCost, cylinderCapacityCost, additionalFee, adminFee };
+}
+
 async function getAllServices(req, res) {
     const accessToken = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(accessToken).userId;
@@ -242,36 +272,6 @@ async function getServiceById(req, res) {
             message: 'Unexpected server error'
         });
     }
-}
-
-function getInvoiceData(serviceType, pickUpAndDrop, cylinderCapacity) {
-    const adminFee = 5000;
-    let serviceTypeCost = 0;
-    if (serviceType === ServiceType.FULL_SERVICE) {
-        serviceTypeCost = 200000;
-    } else {
-        serviceTypeCost = 100000;
-    }
-
-    let additionalFee = 0;
-    if (pickUpAndDrop) {
-        additionalFee += 25000;
-    }
-
-    let cylinderCapacityCost = 0;
-    if (cylinderCapacity < 150) {
-        cylinderCapacityCost = 50000;
-    }
-    else if (cylinderCapacity >= 150 && cylinderCapacity < 250) {
-        cylinderCapacityCost = 100000;
-    }
-    else if (cylinderCapacity >= 250) {
-        cylinderCapacityCost = 150000;
-    }
-
-    const totalCost = serviceTypeCost + cylinderCapacityCost + additionalFee + adminFee;
-
-    return { totalCost, serviceTypeCost, cylinderCapacityCost, additionalFee, adminFee };
 }
 
 async function getInvoiceDetails(req, res) {
