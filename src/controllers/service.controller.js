@@ -364,9 +364,9 @@ async function addInvoice(req, res) {
             });
         }
 
-        const serviceType = rawService.rows[0].type;
-        const motorcycleId = rawService.rows[0].motorcycle_id;
-        const pickUpAndDrop = rawService.rows[0].pick_up_and_drop;
+        const serviceType = serviceToBeAddInvoice.rows[0].type;
+        const motorcycleId = serviceToBeAddInvoice.rows[0].motorcycle_id;
+        const pickUpAndDrop = serviceToBeAddInvoice.rows[0].pick_up_and_drop;
 
         const rawMotorcycle = await pool.query(
             'SELECT cylinder_capacity FROM motorcycles WHERE id=$1;',
