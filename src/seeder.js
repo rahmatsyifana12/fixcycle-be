@@ -63,6 +63,15 @@ async function runSeeder() {
         );
 
         await pool.query(
+            `CREATE TABLE IF NOT EXISTS invoices (
+                id SERIAL NOT NULL PRIMARY KEY,
+                service_id INT NOT NULL,
+                total_cost INT NOT NULL,
+                is_paid BOOLEAN NOT NULL
+            );`
+        );
+
+        await pool.query(
             `
                 INSERT INTO users (email, password, name, phone_number, address, is_admin, balance)
                 VALUES ('johndoe@example.com', $1, 'John Doe', '08123456789', 'Cimahi, Jawa Barat', FALSE, 0),
