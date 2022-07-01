@@ -40,6 +40,9 @@ const newUserSchema = joi.object({
         .max(255),
 
     balance: joi.number()
+        .required(),
+
+    isAdmin: joi.boolean()
         .required()
 });
 
@@ -62,7 +65,9 @@ const editProfileSchema = joi.object({
     address: joi.string()
         .max(255),
 
-    balance: joi.number()
+    balance: joi.number(),
+
+    isAdmin: joi.boolean()
 });
 
 module.exports = { newUserSchema, editProfileSchema };
