@@ -4,7 +4,7 @@ const routes = require('./routes');
 const config = require('./configs/config');
 
 const app = express();
-const port = config.port;
+const port = config.port ?? 5000;
 
 app.use(express.json());
 app.use(routes);
